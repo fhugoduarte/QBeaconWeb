@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+<html
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
+	<head>
+		<title>LOGIN</title>
+	</head>
+	<body>
+		<form id="login_form" method="POST" th:object="${usuario}" action="/usuario/logar">
+		
+			<input type="email" 
+					th:field="*{email}"
+					placeholder="Email"/>
+
+			<input type="password" 
+					th:field="*{senha}"
+					placeholder="Senha"/>
+
+			<button type="submit">
+				Logar
+			</button>
+
+		</form>
+		
+		<a th:href="@{usuario/cadastrar}">Cadastrar</a>
+	</body>
+</html>

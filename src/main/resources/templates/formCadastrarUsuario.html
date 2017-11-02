@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+
+<html
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
+	<head>
+		<title>CADASTRO</title>
+	</head>
+	<body>
+		<form id="cadastro_form" method="POST" th:object="${usuario}">
+
+			<input type="text" 
+					th:field="*{nome}"
+					placeholder="Nome"/>
+
+			<input type="email" 
+					th:field="*{email}"
+					placeholder="Email"/>
+
+			<input type="password" 
+					th:field="*{senha}"
+					placeholder="Senha"/>
+
+			<button type="submit">
+				Cadastrar
+			</button>
+
+		</form>
+		
+	</body>
+</html>
