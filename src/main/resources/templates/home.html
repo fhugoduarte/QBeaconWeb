@@ -4,8 +4,11 @@
 	
 	<head>
 		<title>Home</title>
+		<meta name="_csrf" content="${_csrf.token}"/>
+    	<!-- default header name is X-CSRF-TOKEN -->
+    	<meta name="_csrf_header" content="${_csrf.headerName}"/>
 	</head>
 	<body>
-		<h1 th:text="${usuarioLogado.nome}"></h1>
+		<h1 th:text="${#authentication.getPrincipal().getNome()}"></h1>
 	</body>
 </html>

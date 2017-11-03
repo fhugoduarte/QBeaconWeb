@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.tcc.qbeacon.model.Papel;
 import com.tcc.qbeacon.model.Usuario;
 import com.tcc.qbeacon.service.UsuarioService;
 
@@ -30,25 +31,14 @@ public class UsuarioController {
 	@PostMapping(path="/cadastrar")
 	public String salvarUsuario(@Valid Usuario usuario, BindingResult result) {
 		if (result.hasErrors()) return "redirect:/cadastrar";
+		usuario.setPapel(Papel.ADMINISTRADOR);
 		usuarioService.salvarUsuario(usuario);
 		return "redirect:/";
 	}
 	
-	@PostMapping(path="/logar")
-	public ModelAndView logar(@Valid Usuario usuario, BindingResult result) {
-		System.out.println("ENTROU");
-		Usuario usuarioLogado = usuarioService.logar(usuario.getEmail(), usuario.getSenha());
-		System.out.println("NOME: " + usuarioLogado.getNome());
-		
-		if(usuarioLogado == null || result.hasErrors()) {
-			ModelAndView model = new ModelAndView("formLoginUsuario");
-			model.addObject("usuario", new Usuario());
-			return model;
-		} else {
-			ModelAndView model = new ModelAndView("home");
-			model.addObject("usuarioLogado", usuarioLogado);
-			return model;
-		}
+	@GetMapping(path="/home")
+	public ModelAndView logou() {
+		ModelAndView model = new ModelAndView("home");
+		return model;
 	}
-	
 }
