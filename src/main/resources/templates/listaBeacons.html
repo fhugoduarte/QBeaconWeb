@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+
+<html
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
+	<head>
+		<title>BEACONS</title>
+		<meta name="_csrf" content="${_csrf.token}"/>
+    	<!-- default header name is X-CSRF-TOKEN -->
+    	<meta name="_csrf_header" content="${_csrf.headerName}"/>
+	</head>
+	<body>
+		
+		<h2>Lista de Beacons</h2>
+		
+		<table>
+			<thead>
+				<tr>
+					<th>Nome</th>
+					<th>Ações</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="beacon : ${beacons}">
+					<td th:text="${beacon.nome}"></td>
+					<td>
+						<a th:href="@{${'/beacon/deletar/'+beacon.id}}">
+							Deletar
+						</a>
+						<a th:href="@{${'/beacon/editar/'+beacon.id}}">
+							Editar
+						</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		
+		<a th:href="@{/beacon/cadastrar}">Cadastrar Beacon</a>
+	</body>
+</html>

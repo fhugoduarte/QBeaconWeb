@@ -3,12 +3,20 @@
 	xmlns:th="http://www.thymeleaf.org">
 	
 	<head>
-		<title>Home</title>
+		<title>Principal</title>
 		<meta name="_csrf" content="${_csrf.token}"/>
     	<!-- default header name is X-CSRF-TOKEN -->
     	<meta name="_csrf_header" content="${_csrf.headerName}"/>
 	</head>
 	<body>
 		<h1 th:text="${#authentication.getPrincipal().getNome()}"></h1>
+		
+		<a th:href="@{/instituicao/listar_instituicoes}">VER INSTITUIÇÕES</a> <br/>
+		<a th:href="@{/campus/listar_campus}">VER CAMPUS</a><br/>
+		<a th:href="@{/bloco/listar_blocos}">VER BLOCOS</a><br/>
+		<a th:href="@{/beacon/listar_beacons}">VER BEACONS</a><br/>
+		<a th:href="@{/disciplina/listar_disciplinas}">VER DISCIPLINAS</a><br/>
+		
+		<a th:href="@{/usuario/logout}">LOGOUT</a>
 	</body>
 </html>
