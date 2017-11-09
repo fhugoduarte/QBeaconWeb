@@ -23,7 +23,7 @@ public class UsuarioController {
 	
 	@GetMapping(path="/cadastrar")
 	public ModelAndView cadastrarUsuario() {
-		ModelAndView model = new ModelAndView("formCadastrarUsuario");
+		ModelAndView model = new ModelAndView("usuario/formCadastrarUsuario");
 		model.addObject("usuario", new Usuario());
 		return model;
 	}

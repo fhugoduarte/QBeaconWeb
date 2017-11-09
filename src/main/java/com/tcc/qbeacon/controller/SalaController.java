@@ -25,7 +25,7 @@ public class SalaController {
 	
 	@GetMapping(path="/listar_salas")
 	public ModelAndView listaSalas() {
-		ModelAndView model = new ModelAndView("listaSalas");
+		ModelAndView model = new ModelAndView("sala/listaSalas");
 		List<Sala> salas = salaService.pegarSalas();
 		model.addObject("salas", salas);
 		return model;
@@ -33,7 +33,7 @@ public class SalaController {
 	
 	@GetMapping("/cadastrar")
 	public ModelAndView cadastrarSala() {
-		ModelAndView model = new ModelAndView("formCadastrarSala");
+		ModelAndView model = new ModelAndView("sala/formCadastrarSala");
 		model.addObject("sala", new Sala());
 		return model;
 	}
@@ -55,7 +55,7 @@ public class SalaController {
 	@GetMapping("/editar/{id}")
 	public ModelAndView editarSala(@PathVariable("id") Integer id) {
 		Sala sala = salaService.buscarSala(id);
-		ModelAndView model = new ModelAndView("formEditarSala");
+		ModelAndView model = new ModelAndView("sala/formEditarSala");
 		model.addObject("sala", sala);
 		return model;
 	}

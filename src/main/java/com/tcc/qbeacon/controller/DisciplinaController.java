@@ -25,7 +25,7 @@ public class DisciplinaController {
 	
 	@GetMapping(path="/listar_disciplinas")
 	public ModelAndView listaDisciplinas() {
-		ModelAndView model = new ModelAndView("listaDisciplinas");
+		ModelAndView model = new ModelAndView("disciplina/listaDisciplinas");
 		List<Disciplina> disciplinas = disciplinaService.pegarDisciplinas();
 		model.addObject("disciplinas", disciplinas);
 		return model;
@@ -33,7 +33,7 @@ public class DisciplinaController {
 	
 	@GetMapping("/cadastrar")
 	public ModelAndView cadastrarDisciplina() {
-		ModelAndView model = new ModelAndView("formCadastrarDisciplina");
+		ModelAndView model = new ModelAndView("disciplina/formCadastrarDisciplina");
 		model.addObject("disciplina", new Disciplina());
 		return model;
 	}
@@ -55,7 +55,7 @@ public class DisciplinaController {
 	@GetMapping("/editar/{id}")
 	public ModelAndView editarDisciplina(@PathVariable("id") Integer id) {
 		Disciplina disciplina = disciplinaService.buscarDisciplina(id);
-		ModelAndView model = new ModelAndView("formEditarDisciplina");
+		ModelAndView model = new ModelAndView("disciplina/formEditarDisciplina");
 		model.addObject("disciplina", disciplina);
 		return model;
 	}

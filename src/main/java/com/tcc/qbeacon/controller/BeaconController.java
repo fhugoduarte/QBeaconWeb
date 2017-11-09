@@ -25,7 +25,7 @@ public class BeaconController {
 	
 	@GetMapping(path="/listar_beacons")
 	public ModelAndView listaBeacons() {
-		ModelAndView model = new ModelAndView("listaBeacons");
+		ModelAndView model = new ModelAndView("beacon/listaBeacons");
 		List<Beacon> beacons = beaconService.pegarBeacons();
 		model.addObject("beacons", beacons);
 		return model;
@@ -33,7 +33,7 @@ public class BeaconController {
 	
 	@GetMapping("/cadastrar")
 	public ModelAndView cadastrarBeacon() {
-		ModelAndView model = new ModelAndView("formCadastrarBeacon");
+		ModelAndView model = new ModelAndView("beacon/formCadastrarBeacon");
 		model.addObject("beacon", new Beacon());
 		return model;
 	}
@@ -55,7 +55,7 @@ public class BeaconController {
 	@GetMapping("/editar/{id}")
 	public ModelAndView editarBeacon(@PathVariable("id") Integer id) {
 		Beacon beacon = beaconService.buscarBeacon(id);
-		ModelAndView model = new ModelAndView("formEditarBeacon");
+		ModelAndView model = new ModelAndView("beacon/formEditarBeacon");
 		model.addObject("beacon", beacon);
 		return model;
 	}
