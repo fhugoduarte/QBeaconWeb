@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+
+<html
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
+	<head>
+		<title>INSTITUIÇÕES</title>
+		<meta name="_csrf" content="${_csrf.token}"/>
+    	<!-- default header name is X-CSRF-TOKEN -->
+    	<meta name="_csrf_header" content="${_csrf.headerName}"/>
+	</head>
+	<body>
+		
+		<h2>Lista de Instituições</h2>
+		
+		<table>
+			<thead>
+				<tr>
+					<th>Nome</th>
+					<th>Ações</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="instituicao : ${instituicoes}">
+					<td th:text="${instituicao.nome}"></td>
+					<td>
+						<a th:href="@{${'/instituicao/deletar/'+instituicao.id}}">
+							Deletar
+						</a>
+						<a th:href="@{${'/instituicao/editar/'+instituicao.id}}">
+							Editar
+						</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		
+		<a th:href="@{/instituicao/cadastrar}">Cadastrar Instituição</a>
+	</body>
+</html>
