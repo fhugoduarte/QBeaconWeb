@@ -12,7 +12,7 @@ public class PrincipalController {
 	
 	@RequestMapping(path="")
 	public ModelAndView loginUsuario() {
-		ModelAndView model = new ModelAndView("formLoginUsuario");
+		ModelAndView model = new ModelAndView("usuario/formLoginUsuario");
 		model.addObject("usuario", new Usuario());
 		return model;
 	}

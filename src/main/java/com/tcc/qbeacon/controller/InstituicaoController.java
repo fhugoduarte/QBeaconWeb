@@ -25,7 +25,7 @@ public class InstituicaoController {
 	
 	@GetMapping(path="/listar_instituicoes")
 	public ModelAndView listaInstituicoes() {
-		ModelAndView model = new ModelAndView("listaInstituicoes");
+		ModelAndView model = new ModelAndView("instituicao/listaInstituicoes");
 		List<Instituicao> instituicoes = instituicaoService.pegarInstituicoes();
 		model.addObject("instituicoes", instituicoes);
 		return model;
@@ -33,7 +33,7 @@ public class InstituicaoController {
 	
 	@GetMapping("/cadastrar")
 	public ModelAndView cadastrarInstituicao() {
-		ModelAndView model = new ModelAndView("formCadastrarInstituicao");
+		ModelAndView model = new ModelAndView("instituicao/formCadastrarInstituicao");
 		model.addObject("instituicao", new Instituicao());
 		return model;
 	}
@@ -55,7 +55,7 @@ public class InstituicaoController {
 	@GetMapping("/editar/{id}")
 	public ModelAndView editarInstituicao(@PathVariable("id") Integer id) {
 		Instituicao instituicao = instituicaoService.buscarInstituicao(id);
-		ModelAndView model = new ModelAndView("formEditarInstituicao");
+		ModelAndView model = new ModelAndView("instituicao/formEditarInstituicao");
 		model.addObject("instituicao", instituicao);
 		return model;
 	}

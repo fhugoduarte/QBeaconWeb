@@ -25,7 +25,7 @@ public class TurmaController {
 	
 	@GetMapping(path="/listar_turmas")
 	public ModelAndView listaTurmas() {
-		ModelAndView model = new ModelAndView("listaTurmas");
+		ModelAndView model = new ModelAndView("turma/listaTurmas");
 		List<Turma> turmas = turmaService.pegarTurmas();
 		model.addObject("turmas", turmas);
 		return model;
@@ -33,7 +33,7 @@ public class TurmaController {
 	
 	@GetMapping("/cadastrar")
 	public ModelAndView cadastrarTurma() {
-		ModelAndView model = new ModelAndView("formCadastrarTurma");
+		ModelAndView model = new ModelAndView("turma/formCadastrarTurma");
 		model.addObject("turma", new Turma());
 		return model;
 	}
@@ -55,7 +55,7 @@ public class TurmaController {
 	@GetMapping("/editar/{id}")
 	public ModelAndView editarTurma(@PathVariable("id") Integer id) {
 		Turma turma = turmaService.buscarTurma(id);
-		ModelAndView model = new ModelAndView("formEditarTurma");
+		ModelAndView model = new ModelAndView("turma/formEditarTurma");
 		model.addObject("turma", turma);
 		return model;
 	}

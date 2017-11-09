@@ -25,7 +25,7 @@ public class CampusController {
 	
 	@GetMapping(path="/listar_campus")
 	public ModelAndView listaCampus() {
-		ModelAndView model = new ModelAndView("listaCampus");
+		ModelAndView model = new ModelAndView("campus/listaCampus");
 		List<Campus> campus = campusService.pegarCampus();
 		model.addObject("campus", campus);
 		return model;
@@ -33,7 +33,7 @@ public class CampusController {
 	
 	@GetMapping("/cadastrar")
 	public ModelAndView cadastrarCampus() {
-		ModelAndView model = new ModelAndView("formCadastrarCampus");
+		ModelAndView model = new ModelAndView("campus/formCadastrarCampus");
 		model.addObject("campus", new Campus());
 		return model;
 	}
@@ -55,7 +55,7 @@ public class CampusController {
 	@GetMapping("/editar/{id}")
 	public ModelAndView editarCampus(@PathVariable("id") Integer id) {
 		Campus campus = campusService.buscarCampus(id);
-		ModelAndView model = new ModelAndView("formEditarCampus");
+		ModelAndView model = new ModelAndView("campus/formEditarCampus");
 		model.addObject("campus", campus);
 		return model;
 	}

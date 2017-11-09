@@ -25,7 +25,7 @@ public class BlocoController {
 	
 	@GetMapping(path="/listar_blocos")
 	public ModelAndView listaBlocos() {
-		ModelAndView model = new ModelAndView("listaBlocos");
+		ModelAndView model = new ModelAndView("bloco/listaBlocos");
 		List<Bloco> blocos = blocoService.pegarBlocos();
 		model.addObject("blocos", blocos);
 		return model;
@@ -33,7 +33,7 @@ public class BlocoController {
 	
 	@GetMapping("/cadastrar")
 	public ModelAndView cadastrarBloco() {
-		ModelAndView model = new ModelAndView("formCadastrarBloco");
+		ModelAndView model = new ModelAndView("bloco/formCadastrarBloco");
 		model.addObject("bloco", new Bloco());
 		return model;
 	}
@@ -55,7 +55,7 @@ public class BlocoController {
 	@GetMapping("/editar/{id}")
 	public ModelAndView editarBloco(@PathVariable("id") Integer id) {
 		Bloco bloco = blocoService.buscarBloco(id);
-		ModelAndView model = new ModelAndView("formEditarBloco");
+		ModelAndView model = new ModelAndView("bloco/formEditarBloco");
 		model.addObject("bloco", bloco);
 		return model;
 	}
