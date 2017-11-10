@@ -35,10 +35,5 @@ public class UsuarioController {
 		usuarioService.salvarUsuario(usuario);
 		return "redirect:/";
 	}
-	
-	@GetMapping(path="/home")
-	public ModelAndView logou() {
-		ModelAndView model = new ModelAndView("home");
-		return model;
-	}
+
 }
