@@ -22,12 +22,16 @@ public class CampusService {
 		return campusRepo.findOne(id);
 	}
 	
-	public List<Campus> pegarCampus () {
+	public List<Campus> pegarTodosCampus () {
 		return campusRepo.findAll();
 	}
 	
 	public void deletarCampus (Campus campus) {
 		campusRepo.delete(campus);
+	}
+	
+	public List<Campus> pegarCampusValidos () {
+		return campusRepo.campusValidos();
 	}
 	
 }

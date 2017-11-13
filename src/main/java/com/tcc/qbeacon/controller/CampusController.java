@@ -26,7 +26,7 @@ public class CampusController {
 	@GetMapping(path="/listar_campus")
 	public ModelAndView listaCampus() {
 		ModelAndView model = new ModelAndView("campus/listaCampus");
-		List<Campus> campus = campusService.pegarCampus();
+		List<Campus> campus = campusService.pegarTodosCampus();
 		model.addObject("campus", campus);
 		return model;
 	}

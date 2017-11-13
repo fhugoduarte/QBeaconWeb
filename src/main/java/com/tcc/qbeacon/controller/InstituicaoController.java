@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.tcc.qbeacon.model.Campus;
 import com.tcc.qbeacon.model.Instituicao;
+import com.tcc.qbeacon.service.CampusService;
 import com.tcc.qbeacon.service.InstituicaoService;
 
 @Controller
@@ -22,6 +24,9 @@ public class InstituicaoController {
 	
 	@Autowired
 	InstituicaoService instituicaoService;
+	
+	@Autowired
+	CampusService campusService;
 	
 	@GetMapping(path="/listar_instituicoes")
 	public ModelAndView listaInstituicoes() {
@@ -64,5 +69,48 @@ public class InstituicaoController {
 	public String editarInstituicao(@Valid Instituicao instituicao, BindingResult result) {	
 		instituicaoService.salvarInstituicao(instituicao);
 		return "redirect:/instituicao/listar_instituicoes";
+	}
+	
+	@GetMapping("/{id}")
+	public ModelAndView visualizarInstituicao(@PathVariable("id") Integer id) {
+		Instituicao instituicao = instituicaoService.buscarInstituicao(id);
+		ModelAndView model = new ModelAndView("instituicao/detalhesInstituicao");
+		model.addObject("instituicao", instituicao);
+		
+		List<Campus> campus = campusService.pegarCampusValidos();
+		
+		model.addObject("outrosCampus",campus);
+		return model;
+	}
+	
+	@GetMapping("/{id_instituicao}/adicionar_campus/{id_campus}")
+	public String adicionarCampus(@PathVariable("id_instituicao") Integer id_instituicao,
+									@PathVariable("id_campus") Integer id_campus) {
+		Instituicao instituicao = instituicaoService.buscarInstituicao(id_instituicao);
+		Campus campus = campusService.buscarCampus(id_campus);
+		
+		System.out.println("TESTE 1");
+		
+		List<Campus> instCampus = instituicao.getCampus();
+		System.out.println(instCampus.toString());
+		instCampus.add(campus);
+		
+		System.out.println("TESTE 2");
+		
+		instituicao.setCampus(instCampus);
+		instituicaoService.salvarInstituicao(instituicao);
+		
+		System.out.println("TESTE 3");
+		
+		//campusList = campusService.pegarCampus();
+		//campusList.remove(campus);
+		
+		/*ModelAndView model = new ModelAndView("instituicao/detalhesInstituicao");
+		model.addObject("instituicao", instituicaoSalva);
+		model.addObject("campus", campusList);
+		
+		return model;*/
+		
+		return "redirect:/instituicao/" + instituicao.getId();
 	}
 }
