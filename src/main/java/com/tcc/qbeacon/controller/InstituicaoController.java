@@ -77,8 +77,7 @@ public class InstituicaoController {
 		ModelAndView model = new ModelAndView("instituicao/detalhesInstituicao");
 		model.addObject("instituicao", instituicao);
 		
-		List<Campus> campus = campusService.pegarCampusValidos();
-		
+		List<Campus> campus = campusService.pegarCampusValidos();		
 		model.addObject("outrosCampus",campus);
 		return model;
 	}
@@ -89,28 +88,26 @@ public class InstituicaoController {
 		Instituicao instituicao = instituicaoService.buscarInstituicao(id_instituicao);
 		Campus campus = campusService.buscarCampus(id_campus);
 		
-		System.out.println("TESTE 1");
-		
 		List<Campus> instCampus = instituicao.getCampus();
-		System.out.println(instCampus.toString());
 		instCampus.add(campus);
-		
-		System.out.println("TESTE 2");
 		
 		instituicao.setCampus(instCampus);
 		instituicaoService.salvarInstituicao(instituicao);
 		
-		System.out.println("TESTE 3");
+		return "redirect:/instituicao/" + instituicao.getId();
+	}
+	
+	@GetMapping("/{id_instituicao}/remover_campus/{id_campus}")
+	public String removerCampus(@PathVariable("id_instituicao") Integer id_instituicao,
+			@PathVariable("id_campus") Integer id_campus) {
+		Instituicao instituicao = instituicaoService.buscarInstituicao(id_instituicao);
+		Campus campus = campusService.buscarCampus(id_campus);
 		
-		//campusList = campusService.pegarCampus();
-		//campusList.remove(campus);
+		List<Campus> campusInst = instituicao.getCampus();
+		campusInst.remove(campus);
 		
-		/*ModelAndView model = new ModelAndView("instituicao/detalhesInstituicao");
-		model.addObject("instituicao", instituicaoSalva);
-		model.addObject("campus", campusList);
-		
-		return model;*/
-		
+		instituicao.setCampus(campusInst);
+		instituicaoService.salvarInstituicao(instituicao);
 		return "redirect:/instituicao/" + instituicao.getId();
 	}
 }

@@ -19,12 +19,16 @@
 			<thead>
 				<tr>
 					<th>Lista de Campus desta Instituição</th>
-					
+					<th>Ações</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr th:each="campus : ${instituicao.campus}">
 					<td th:text="${campus.nome}"></td>
+					<td>
+						<a th:href="@{${'/instituicao/' + instituicao.id
+									 + '/remover_campus/' + campus.id}}">Remover</a>
+					</td>
 				</tr>
 			</tbody>
 		</table><br/>

@@ -13,8 +13,11 @@ import com.tcc.qbeacon.model.Campus;
 @Repository
 @Transactional
 public interface CampusRepository extends JpaRepository<Campus, Integer> {
-	@Query("select c "
-			+ "from Campus c "
-			+ "c.id not in  (select campus_id from INSTITUICAO_CAMPUS)")
+	@Query(value = "SELECT * FROM CAMPUS c "
+			+ "WHERE c.id NOT IN "
+			+ "(SELECT campus_id FROM INSTITUICAO_CAMPUS)",
+			nativeQuery=true)
 	List<Campus> campusValidos();
+	
+	
 }
