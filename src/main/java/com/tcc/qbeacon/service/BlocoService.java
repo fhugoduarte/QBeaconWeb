@@ -29,4 +29,8 @@ public class BlocoService {
 	public void deletarBloco (Bloco bloco) {
 		blocoRepo.delete(bloco);
 	}
+	
+	public List<Bloco> pegarBlocosValidos () {
+		return blocoRepo.blocosValidos();
+	}
 }

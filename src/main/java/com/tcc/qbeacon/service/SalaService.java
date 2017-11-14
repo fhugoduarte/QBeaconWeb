@@ -30,4 +30,8 @@ public class SalaService {
 		salaRepo.delete(sala);
 	}
 	
+	public List<Sala> pegarSalasValidas() {
+		return salaRepo.salasValidas();
+	}
+	
 }

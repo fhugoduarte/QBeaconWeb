@@ -6,12 +6,26 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 >
 	<head>
-		<title>LOGIN</title>
+		<title>Login</title>
+		
+		<link rel="icon" type="image/png" sizes="16x16" th:href="@{/imgs/beaconIco.png}" />
+		
 		<meta name="_csrf" content="${_csrf.token}"/>
     	<!-- default header name is X-CSRF-TOKEN -->
     	<meta name="_csrf_header" content="${_csrf.headerName}"/>
+    	
+    	<meta charset="utf-8"/>
+    	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+    	
+    	<link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet" />
 	</head>
 	<body>
+		
+		<div class="container">
+			
+		</div>
+	
 		<form id="login_form" method="POST" th:object="${usuario}">
 		
 			<input type="hidden"

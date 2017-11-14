@@ -4,9 +4,18 @@
 	
 	<head>
 		<title>Principal</title>
+		
+		<link rel="icon" type="image/png" sizes="16x16" th:href="@{/imgs/beaconIco.png}" />
+		
 		<meta name="_csrf" content="${_csrf.token}"/>
     	<!-- default header name is X-CSRF-TOKEN -->
     	<meta name="_csrf_header" content="${_csrf.headerName}"/>
+    	
+    	<meta charset="utf-8"/>
+    	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+    	
+    	<link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet" />
 	</head>
 	<body>
 		<h1 th:text="${#authentication.getPrincipal().getNome()}"></h1>
@@ -20,5 +29,8 @@
 		<a th:href="@{/turma/listar_turmas}">VER TURMAS</a><br/>
 		
 		<a th:href="@{/usuario/logout}">LOGOUT</a>
+		
+		<script th:src="@{/bootstrap//js/jquery.js}"></script>
+		<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
 	</body>
 </html>

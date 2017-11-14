@@ -86,7 +86,10 @@ public class InstituicaoController {
 	public String adicionarCampus(@PathVariable("id_instituicao") Integer id_instituicao,
 									@PathVariable("id_campus") Integer id_campus) {
 		Instituicao instituicao = instituicaoService.buscarInstituicao(id_instituicao);
+		
 		Campus campus = campusService.buscarCampus(id_campus);
+		campus.setInstituicao(instituicao);
+		campus = campusService.salvarCampus(campus);
 		
 		List<Campus> instCampus = instituicao.getCampus();
 		instCampus.add(campus);
@@ -100,7 +103,7 @@ public class InstituicaoController {
 	@GetMapping("/{id_instituicao}/remover_campus/{id_campus}")
 	public String removerCampus(@PathVariable("id_instituicao") Integer id_instituicao,
 			@PathVariable("id_campus") Integer id_campus) {
-		Instituicao instituicao = instituicaoService.buscarInstituicao(id_instituicao);
+		Instituicao instituicao = instituicaoService.buscarInstituicao(id_instituicao);	
 		Campus campus = campusService.buscarCampus(id_campus);
 		
 		List<Campus> campusInst = instituicao.getCampus();
@@ -108,6 +111,36 @@ public class InstituicaoController {
 		
 		instituicao.setCampus(campusInst);
 		instituicaoService.salvarInstituicao(instituicao);
+		
+		campus.setInstituicao(null);
+		campusService.salvarCampus(campus);
+		
 		return "redirect:/instituicao/" + instituicao.getId();
+	}
+	
+	@GetMapping("/{id_instituicao}/criar_campus")
+	public ModelAndView criarCampus(@PathVariable("id_instituicao") Integer id_instituicao) {
+		ModelAndView model = new ModelAndView("campus/formCadastrarCampus");
+		
+		model.addObject("campus", new Campus());
+		return model;
+	}
+	
+	@PostMapping("/{id_instituicao}/criar_campus")
+	public String salvarCampus(@PathVariable("id_instituicao") Integer id_instituicao,
+							@Valid Campus campus, BindingResult result) {
+		if (result.hasErrors()) return "redirect:/institucao/"+id_instituicao+"/criar_campus";
+		
+		Instituicao instituicao = instituicaoService.buscarInstituicao(id_instituicao);
+		campus.setInstituicao(instituicao);
+		Campus campusSalvo = campusService.salvarCampus(campus);
+		
+		List<Campus> campusInst = instituicao.getCampus();
+		campusInst.add(campusSalvo);
+		instituicao.setCampus(campusInst);
+		instituicaoService.salvarInstituicao(instituicao);
+		
+		return "redirect:/instituicao/"+instituicao.getId();
+		
 	}
 }
