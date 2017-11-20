@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+	
+<body>
+	<div class="navbar navbar-default navbar-fixed-top row" id="fixed_header" th:fragment="header">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            			<span class="sr-only">Toggle navigation</span>
+            			<span class="icon-bar"></span>
+            			<span class="icon-bar"></span>
+            			<span class="icon-bar"></span>
+          			</button>
+          			<span class="navbar-brand">QBeacon</span>
+				</div>
+				<div id="navbar" class="navbar-collapse collapse">
+					<ul class="nav navbar-nav">
+						<li class="active"><a th:href="@{/home}">Home</a></li>
+						<li><a href="#">Reservar Sala</a></li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+								Cadastrar
+								<span class="caret"></span>
+							</a>
+							<ul class="dropdown-menu">
+								<li><a th:href="@{/aula/cadastrar}">Aula</a></li>
+								<li><a th:href="@{/beacon/cadastrar}">Beacon</a></li>
+								<li><a th:href="@{/bloco/cadastrar}">Bloco</a></li>
+								<li><a th:href="@{/campus/cadastrar}">Campus</a></li>
+								<li><a th:href="@{/disciplina/cadastrar}">Disciplina</a></li>
+								<li><a th:href="@{/instituicao/cadastrar}">Instituição</a></li>
+								<li><a th:href="@{/sala/cadastrar}">Sala</a></li>
+								<li><a th:href="@{/turma/cadastrar}">Turma</a></li>
+							</ul>
+						</li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+								Visualizar
+								<span class="caret"></span>
+							</a>
+							<ul class="dropdown-menu">
+								<li><a th:href="@{/aula/listar_aulas}">Aulas</a></li>
+								<li><a th:href="@{/beacon/listar_beacons}">Beacons</a></li>
+								<li><a th:href="@{/bloco/listar_blocos}">Blocos</a></li>
+								<li><a th:href="@{/campus/listar_campus}">Campus</a></li>
+								<li><a th:href="@{/disciplina/listar_disciplinas}">Disciplinas</a></li>
+								<li><a th:href="@{/instituicao/listar_instituicoes}">Instituições</a></li>
+								<li><a th:href="@{/sala/listar_salas}">Salas</a></li>
+								<li><a th:href="@{/turma/listar_turmas}">Turmas</a></li>
+							</ul>
+						</li>
+					</ul>
+					 <ul class="nav navbar-nav navbar-right">
+					 	<li><a th:text="${'Seja bem vindo, ' + #authentication.getPrincipal().getNome() + ' !'}"></a></li>
+					 	<li class="active"><a th:href="@{/usuario/logout}"> Logout <span class="sr-only">(current)</span></a></li>
+					 </ul>
+				</div>
+			</div>
+		</div><!-- End to header -->
+</body>
+
+</html>
