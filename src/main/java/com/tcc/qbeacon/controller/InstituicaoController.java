@@ -53,6 +53,18 @@ public class InstituicaoController {
 	@GetMapping("/deletar/{id}")
 	public String deletarInstituicao(@PathVariable("id") Integer id) {
 		Instituicao instituicao = instituicaoService.buscarInstituicao(id);
+		/*if(instituicao.getCampus().isEmpty()) {
+			System.err.println("TESTE");
+			instituicaoService.deletarInstituicao(instituicao);
+			return "redirect:/instituicao/listar_instituicoes";
+		}
+		
+		for (Campus camp : instituicao.getCampus()) {
+			System.out.println("TESTE" + camp.getNome());
+			camp.setInstituicao(null);
+			campusService.salvarCampus(camp);
+		}*/
+		
 		instituicaoService.deletarInstituicao(instituicao);
 		return "redirect:/instituicao/listar_instituicoes";
 	}
@@ -143,4 +155,5 @@ public class InstituicaoController {
 		return "redirect:/instituicao/"+instituicao.getId();
 		
 	}
+	
 }

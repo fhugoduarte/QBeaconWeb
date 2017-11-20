@@ -15,8 +15,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.tcc.qbeacon.model.Bloco;
 import com.tcc.qbeacon.model.Campus;
+import com.tcc.qbeacon.model.Instituicao;
 import com.tcc.qbeacon.service.BlocoService;
 import com.tcc.qbeacon.service.CampusService;
+import com.tcc.qbeacon.service.InstituicaoService;
 
 @Controller
 @RequestMapping(path="/campus")
@@ -24,6 +26,9 @@ public class CampusController {
 	
 	@Autowired
 	CampusService campusService;
+	
+	@Autowired
+	InstituicaoService instituicaoService;
 	
 	@Autowired
 	BlocoService blocoService;
@@ -38,15 +43,30 @@ public class CampusController {
 	
 	@GetMapping("/cadastrar")
 	public ModelAndView cadastrarCampus() {
+		List<Instituicao> instituicoes = instituicaoService.pegarInstituicoes();
+		
 		ModelAndView model = new ModelAndView("campus/formCadastrarCampus");
 		model.addObject("campus", new Campus());
+		model.addObject("instituicoes", instituicoes);
 		return model;
 	}
 	
 	@PostMapping("/cadastrar")
 	public String salvarCampus(@Valid Campus campus, BindingResult result ) {
 		if (result.hasErrors()) return "redirect:/campus/cadastrar";
-		campusService.salvarCampus(campus);
+		Campus campusSalvo = campusService.salvarCampus(campus);
+		Instituicao instituicao = campusSalvo.getInstituicao();
+		
+		instituicao = this.adicionarCampusInstituicao(instituicao, campusSalvo);
+		instituicaoService.salvarInstituicao(instituicao);
+		
+		/*Instituicao instituicao = campus.getInstituicao();
+		instituicao = this.adicionarCampusInstituicao(instituicao, campus);
+		
+		Instituicao instituicaoSalva = instituicaoService.salvarInstituicao(instituicao);
+		
+		campus.setInstituicao(instituicaoSalva);
+		campusService.salvarCampus(campus);*/
 		return "redirect:/campus/listar_campus";
 	}
 	
@@ -143,5 +163,13 @@ public class CampusController {
 		
 		return "redirect:/campus/"+campus.getId();
 		
+	}
+	
+	public Instituicao adicionarCampusInstituicao(Instituicao instituicao, Campus campus) {
+		List<Campus> lcampus = instituicao.getCampus();
+		lcampus.add(campus);
+		instituicao.setCampus(lcampus);
+		
+		return instituicao;
 	}
 }
