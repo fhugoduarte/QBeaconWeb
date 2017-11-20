@@ -2,6 +2,7 @@ package com.tcc.qbeacon.model;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,7 +17,7 @@ public class Instituicao {
 	private Integer id;
 	private String nome;
 	
-	@OneToMany
+	@OneToMany(cascade=CascadeType.ALL)
 	private List<Campus> campus;
 	
 	public Instituicao() {

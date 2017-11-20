@@ -18,13 +18,15 @@
 		<table>
 			<thead>
 				<tr>
-					<th>Nome</th>
+					<th>Professor</th>
+					<th>Disciplina</th>
 					<th>Ações</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr th:each="turma : ${turmas}">
 					<td th:text="${turma.professor}"></td>
+					<td th:text="${turma.disciplina.nome}"></td>
 					<td>
 						<a th:href="@{${'/turma/deletar/'+turma.id}}">
 							Deletar
