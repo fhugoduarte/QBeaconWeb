@@ -18,10 +18,10 @@ public class Campus {
 	private Integer id;
 	private String nome;
 	
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne
 	private Instituicao instituicao;
 	
-	@OneToMany
+	@OneToMany(cascade=CascadeType.ALL)
 	private List<Bloco> blocos;
 	
 	public Campus() {

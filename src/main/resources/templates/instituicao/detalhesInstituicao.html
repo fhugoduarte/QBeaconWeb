@@ -18,7 +18,7 @@
 		<table>
 			<thead>
 				<tr>
-					<th>Lista de Campus desta Instituição</th>
+					<th>Lista de Campus</th>
 					<th>Ações</th>
 				</tr>
 			</thead>
@@ -26,32 +26,12 @@
 				<tr th:each="campus : ${instituicao.campus}">
 					<td th:text="${campus.nome}"></td>
 					<td>
-						<a th:href="@{${'/instituicao/' + instituicao.id
-									 + '/remover_campus/' + campus.id}}">Remover</a>
 						<a th:href="@{${'/campus/'+campus.id}}">Detalhes</a>
 					</td>
 				</tr>
 			</tbody>
 		</table><br/>
-		<a th:href="@{${'/instituicao/'+instituicao.id+'/criar_campus'}}">Criar novo Campus</a>
-		<table>
-			<thead>
-				<tr>
-					<th>Outros Campus</th>
-					<th>Ações</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="campus : ${outrosCampus}">
-					<td th:text="${campus.nome}"></td>
-					<td>
-						<a th:href="@{${'/instituicao/' + instituicao.id
-									 + '/adicionar_campus/' + campus.id}}">Adicionar</a>
-						<a th:href="@{${'/campus/'+campus.id}}">Detalhes</a>
-					</td>
-				</tr>
-			</tbody>
-		</table>
+		<a th:href="@{${'/instituicao/'+instituicao.id+'/criar_campus'}}">Criar novo Campus</a><br/><br/>
 		
 		<a th:href="@{/instituicao/cadastrar}">Cadastrar Instituição</a>
 	</body>

@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.tcc.qbeacon.model.Bloco;
 import com.tcc.qbeacon.model.Sala;
+import com.tcc.qbeacon.service.BlocoService;
 import com.tcc.qbeacon.service.SalaService;
 
 @Controller
@@ -22,6 +24,9 @@ public class SalaController {
 
 	@Autowired
 	SalaService salaService;
+	
+	@Autowired
+	BlocoService blocoService;
 	
 	@GetMapping(path="/listar_salas")
 	public ModelAndView listaSalas() {
@@ -33,7 +38,10 @@ public class SalaController {
 	
 	@GetMapping("/cadastrar")
 	public ModelAndView cadastrarSala() {
+		List<Bloco> blocos = blocoService.pegarBlocos();
+		
 		ModelAndView model = new ModelAndView("sala/formCadastrarSala");
+		model.addObject("blocos", blocos);
 		model.addObject("sala", new Sala());
 		return model;
 	}

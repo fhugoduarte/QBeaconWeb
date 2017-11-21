@@ -60,7 +60,12 @@
           						<span class="input-group-addon">
           							<i class="fa fa-university"></i>
           						</span>
-          						<select class="form-control" th:field="*{instituicao}" 
+          						<select th:if="${campus.instituicao != null}" class="form-control" th:field="*{instituicao}" 
+          								required="true" autofocus="true" disabled="disabled">
+  									<option th:value="${campus.instituicao.id}"
+  										 th:text="${campus.instituicao.nome}"></option>
+								</select>
+          						<select th:unless="${campus.instituicao != null}" class="form-control" th:field="*{instituicao}" 
           								required="true" autofocus="true">
   									<option th:each="instituicao : ${instituicoes}" th:value="${instituicao.id}"
   										 th:text="${instituicao.nome}"></option>

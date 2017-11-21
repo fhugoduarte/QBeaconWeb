@@ -60,19 +60,17 @@ public class CampusController {
 		instituicao = this.adicionarCampusInstituicao(instituicao, campusSalvo);
 		instituicaoService.salvarInstituicao(instituicao);
 		
-		/*Instituicao instituicao = campus.getInstituicao();
-		instituicao = this.adicionarCampusInstituicao(instituicao, campus);
-		
-		Instituicao instituicaoSalva = instituicaoService.salvarInstituicao(instituicao);
-		
-		campus.setInstituicao(instituicaoSalva);
-		campusService.salvarCampus(campus);*/
 		return "redirect:/campus/listar_campus";
 	}
 	
 	@GetMapping("/deletar/{id}")
 	public String deletarCampus(@PathVariable("id") Integer id) {
 		Campus campus = campusService.buscarCampus(id);
+		
+		Instituicao instituicao = campus.getInstituicao();
+		instituicao = this.removerCampusInstituicao(instituicao, campus);
+		instituicaoService.salvarInstituicao(instituicao);
+		
 		campusService.deletarCampus(campus);
 		return "redirect:/campus/listar_campus";
 	}
@@ -97,52 +95,17 @@ public class CampusController {
 		ModelAndView model = new ModelAndView("campus/detalhesCampus");
 		model.addObject("campus", campus);
 		
-		List<Bloco> blocos = blocoService.pegarBlocosValidos();		
-		model.addObject("outrosBlocos",blocos);
 		return model;
-	}
-	
-	@GetMapping("/{id_campus}/adicionar_bloco/{id_bloco}")
-	public String adicionarBloco(@PathVariable("id_campus") Integer id_campus,
-									@PathVariable("id_bloco") Integer id_bloco) {
-		Campus campus = campusService.buscarCampus(id_campus);
-		
-		Bloco bloco = blocoService.buscarBloco(id_bloco);
-		bloco.setCampus(campus);
-		bloco = blocoService.salvarBloco(bloco);
-		
-		List<Bloco> blocos = campus.getBlocos();
-		blocos.add(bloco);
-		
-		campus.setBlocos(blocos);
-		campusService.salvarCampus(campus);
-		
-		return "redirect:/campus/" + campus.getId();
-	}
-	
-	@GetMapping("/{id_campus}/remover_bloco/{id_bloco}")
-	public String removerBloco(@PathVariable("id_campus") Integer id_campus,
-			@PathVariable("id_bloco") Integer id_bloco) {
-		Campus campus = campusService.buscarCampus(id_campus);	
-		Bloco bloco = blocoService.buscarBloco(id_bloco);
-		
-		List<Bloco> blocos = campus.getBlocos();
-		blocos.remove(bloco);
-		
-		campus.setBlocos(blocos);
-		campusService.salvarCampus(campus);
-		
-		bloco.setCampus(null);
-		blocoService.salvarBloco(bloco);
-		
-		return "redirect:/campus/" + campus.getId();
 	}
 	
 	@GetMapping("/{id_campus}/criar_bloco")
 	public ModelAndView criarBloco(@PathVariable("id_campus") Integer id_campus) {
-		ModelAndView model = new ModelAndView("bloco/formCadastrarBloco");
+		Campus campus = campusService.buscarCampus(id_campus);
+		Bloco bloco = new Bloco();
+		bloco.setCampus(campus);
 		
-		model.addObject("bloco", new Bloco());
+		ModelAndView model = new ModelAndView("bloco/formCadastrarBloco");
+		model.addObject("bloco", bloco);
 		return model;
 	}
 	
@@ -168,6 +131,14 @@ public class CampusController {
 	public Instituicao adicionarCampusInstituicao(Instituicao instituicao, Campus campus) {
 		List<Campus> lcampus = instituicao.getCampus();
 		lcampus.add(campus);
+		instituicao.setCampus(lcampus);
+		
+		return instituicao;
+	}
+	
+	public Instituicao removerCampusInstituicao(Instituicao instituicao, Campus campus) {
+		List<Campus> lcampus = instituicao.getCampus();
+		lcampus.remove(campus);
 		instituicao.setCampus(lcampus);
 		
 		return instituicao;

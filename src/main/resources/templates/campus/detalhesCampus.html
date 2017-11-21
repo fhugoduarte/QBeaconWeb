@@ -26,33 +26,12 @@
 				<tr th:each="bloco : ${campus.blocos}">
 					<td th:text="${bloco.nome}"></td>
 					<td>
-						<a th:href="@{${'/campus/' + campus.id
-									 + '/remover_bloco/' + bloco.id}}">Remover</a>
 						<a th:href="@{${'/bloco/'+bloco.id}}">Detalhes</a>
 					</td>
 				</tr>
 			</tbody>
 		</table><br/>
-		<a th:href="@{${'/campus/'+campus.id+'/criar_bloco'}}">Criar novo Bloco</a>
-		<table>
-			<thead>
-				<tr>
-					<th>Outros Blocos</th>
-					<th>Ações</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="bloco : ${outrosBlocos}">
-					<td th:text="${bloco.nome}"></td>
-					<td>
-						<a th:href="@{${'/campus/' + campus.id
-									 + '/adicionar_bloco/' + bloco.id}}">Adicionar</a>
-						<a th:href="@{${'/bloco/'+bloco.id}}">Detalhes</a>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-		
+		<a th:href="@{${'/campus/'+campus.id+'/criar_bloco'}}">Criar novo Bloco</a><br/><br/>		
 		<a th:href="@{/campus/cadastrar}">Cadastrar Campus</a>
 	</body>
 </html>

@@ -14,8 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.tcc.qbeacon.model.Bloco;
+import com.tcc.qbeacon.model.Campus;
+import com.tcc.qbeacon.model.Instituicao;
 import com.tcc.qbeacon.model.Sala;
 import com.tcc.qbeacon.service.BlocoService;
+import com.tcc.qbeacon.service.CampusService;
 import com.tcc.qbeacon.service.SalaService;
 
 @Controller
@@ -28,6 +31,9 @@ public class BlocoController {
 	@Autowired
 	SalaService salaService;
 	
+	@Autowired
+	CampusService campusService;
+	
 	@GetMapping(path="/listar_blocos")
 	public ModelAndView listaBlocos() {
 		ModelAndView model = new ModelAndView("bloco/listaBlocos");
@@ -38,7 +44,10 @@ public class BlocoController {
 	
 	@GetMapping("/cadastrar")
 	public ModelAndView cadastrarBloco() {
+		List<Campus> campus = campusService.pegarTodosCampus();
+		
 		ModelAndView model = new ModelAndView("bloco/formCadastrarBloco");
+		model.addObject("campus", campus);
 		model.addObject("bloco", new Bloco());
 		return model;
 	}
@@ -46,13 +55,23 @@ public class BlocoController {
 	@PostMapping("/cadastrar")
 	public String salvarBloco(@Valid Bloco bloco, BindingResult result ) {
 		if (result.hasErrors()) return "redirect:/bloco/cadastrar";
-		blocoService.salvarBloco(bloco);
+		Bloco blocoSalvo = blocoService.salvarBloco(bloco);
+		Campus campus = blocoSalvo.getCampus();
+		
+		campus = this.adicionarBlocoCampus(campus, blocoSalvo);
+		campusService.salvarCampus(campus);
+
 		return "redirect:/bloco/listar_blocos";
 	}
 	
 	@GetMapping("/deletar/{id}")
 	public String deletarBloco(@PathVariable("id") Integer id) {
 		Bloco bloco = blocoService.buscarBloco(id);
+		
+		Campus campus = bloco.getCampus();
+		campus = this.removerBlocoCampus(campus, bloco);
+		campusService.salvarCampus(campus);
+		
 		blocoService.deletarBloco(bloco);
 		return "redirect:/bloco/listar_blocos";
 	}
@@ -77,45 +96,7 @@ public class BlocoController {
 		ModelAndView model = new ModelAndView("bloco/detalhesBloco");
 		model.addObject("bloco", bloco);
 		
-		List<Sala> salas = salaService.pegarSalasValidas();		
-		model.addObject("outrasSalas",salas);
 		return model;
-	}
-	
-	@GetMapping("/{id_bloco}/adicionar_sala/{id_sala}")
-	public String adicionarSala(@PathVariable("id_bloco") Integer id_bloco,
-									@PathVariable("id_sala") Integer id_sala) {
-		Bloco bloco = blocoService.buscarBloco(id_bloco);
-		
-		Sala sala = salaService.buscarSala(id_sala);
-		sala.setBloco(bloco);
-		sala = salaService.salvarSala(sala);
-		
-		List<Sala> salas = bloco.getSalas();
-		salas.add(sala);
-		
-		bloco.setSalas(salas);
-		blocoService.salvarBloco(bloco);
-		
-		return "redirect:/bloco/" + bloco.getId();
-	}
-	
-	@GetMapping("/{id_bloco}/remover_sala/{id_sala}")
-	public String removerSala(@PathVariable("id_bloco") Integer id_bloco,
-			@PathVariable("id_sala") Integer id_sala) {
-		Bloco bloco = blocoService.buscarBloco(id_bloco);	
-		Sala sala = salaService.buscarSala(id_sala);
-		
-		List<Sala> salas = bloco.getSalas();
-		salas.remove(sala);
-		
-		bloco.setSalas(salas);
-		blocoService.salvarBloco(bloco);
-		
-		sala.setBloco(null);
-		salaService.salvarSala(sala);
-		
-		return "redirect:/bloco/" + bloco.getId();
 	}
 	
 	@GetMapping("/{id_bloco}/criar_sala")
@@ -143,6 +124,22 @@ public class BlocoController {
 		
 		return "redirect:/bloco/"+bloco.getId();
 		
+	}
+	
+	public Campus adicionarBlocoCampus(Campus campus, Bloco bloco) {
+		List<Bloco> blocos = campus.getBlocos();
+		blocos.add(bloco);
+		campus.setBlocos(blocos);
+		
+		return campus;
+	}
+	
+	public Campus removerBlocoCampus(Campus campus, Bloco bloco) {
+		List<Bloco> blocos = campus.getBlocos();
+		blocos.remove(bloco);
+		campus.setBlocos(blocos);
+		
+		return campus;
 	}
 	
 }
