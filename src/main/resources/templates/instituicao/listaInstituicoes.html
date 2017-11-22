@@ -35,25 +35,25 @@
 				<h1> Lista  de Instituições</h1><br/><br/>
 				<div class="card card-container  row">
 					<table class="table table-striped">
-					  <thead>
+					  <thead class="thead-dark">
 					    <tr>
-					      <th scope="col">#</th>
-					      <th scope="col">Instituição</th>
-					      <th scope="col">Ações</th>
+					      <th scope="col" class=" col-sm-2"></th>
+					      <th scope="col"  class=" col-sm-8">Instituição</th>
+					      <th scope="col" class=" col-sm-2">Ações</th>
 					    </tr>
 					  </thead>
 					  <tbody>
 					    <tr th:each="instituicao : ${instituicoes}">
 					      <th scope="row"><i class="fa fa-university"></i></th>
-					      <td><a th:text="${instituicao.nome}" th:href="@{${'/instituicao/'+instituicao.id}}"></a></td>
+					      <td><a th:text="${instituicao.nome}" th:href="@{${'/instituicao/'+instituicao.id}}" title="Detalhes"></a></td>
 					      <td>
-					      	<a class="btn btn-primary btn-sm" th:href="@{${'/instituicao/'+instituicao.id}}">
+					      	<a class="btn btn-primary btn-sm" th:href="@{${'/instituicao/'+instituicao.id}}" title="Detalhes">
 					      		<i class="fa fa-search-plus"></i>
 					      	</a>
-					      	<a class="btn btn-warning btn-sm" th:href="@{${'/instituicao/editar/'+instituicao.id}}">
+					      	<a class="btn btn-warning btn-sm" th:href="@{${'/instituicao/editar/'+instituicao.id}}" title="Editar">
 					      		<i class="fa fa-pencil-square-o"></i>
 					      	</a>
-					      	<a class="btn btn-danger btn-sm" th:href="@{${'/instituicao/deletar'+instituicao.id}}">
+					      	<a class="btn btn-danger btn-sm" th:href="@{${'/instituicao/deletar/'+instituicao.id}}" title="Deletar">
 					      		<i class="fa fa-trash-o"></i>
 					      	</a>
 					      </td>

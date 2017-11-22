@@ -20,7 +20,7 @@
 <link th:href="@{/css/footer.css}" rel="stylesheet" />
 <link href="navbar-fixed-top.css" rel="stylesheet" />
 
-<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" />
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
 
 </head>
 <body>
@@ -37,7 +37,7 @@
 					<h1>Nova Sala</h1><br/>
 					<div class="form-group" align="center">
 					<img id="sala_img" class="img-circle"
-						src="/images/salaLogo.png" height="150" width="150"/><br/><br/>
+						src="/images/logoSala.png" height="150" width="150"/><br/><br/>
 					<p id="sala_name"></p>
 					<form id="cadastro_sala" method="POST" th:object="${sala}">
 						<input type="hidden"
@@ -47,7 +47,7 @@
           					<label for="inputNome">Nome da Sala</label> <br/><br/>
           					<div class="input-group">
           						<span class="input-group-addon">
-          							<i class="fa fa-building"></i>
+          							<i class="glyphicon glyphicon-blackboard"></i>
           						</span>
           						<input type="text" id="inputNome" class="form-control"
 								placeholder="Nome" th:field="*{nome}" required="true"
