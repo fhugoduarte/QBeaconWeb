@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.tcc.qbeacon.model.Beacon;
 import com.tcc.qbeacon.model.Bloco;
 import com.tcc.qbeacon.model.Sala;
+import com.tcc.qbeacon.service.BeaconService;
 import com.tcc.qbeacon.service.BlocoService;
 import com.tcc.qbeacon.service.SalaService;
 
@@ -28,6 +30,9 @@ public class SalaController {
 	@Autowired
 	BlocoService blocoService;
 	
+	@Autowired
+	BeaconService beaconService;
+	
 	@GetMapping(path="/listar_salas")
 	public ModelAndView listaSalas() {
 		ModelAndView model = new ModelAndView("sala/listaSalas");
@@ -39,8 +44,10 @@ public class SalaController {
 	@GetMapping("/cadastrar")
 	public ModelAndView cadastrarSala() {
 		List<Bloco> blocos = blocoService.pegarBlocos();
+		List<Beacon> beacons = beaconService.pegarBeaconsValidos();
 		
 		ModelAndView model = new ModelAndView("sala/formCadastrarSala");
+		model.addObject("beacons", beacons);
 		model.addObject("blocos", blocos);
 		model.addObject("sala", new Sala());
 		return model;
@@ -49,13 +56,35 @@ public class SalaController {
 	@PostMapping("/cadastrar")
 	public String salvarSala(@Valid Sala sala, BindingResult result ) {
 		if (result.hasErrors()) return "redirect:/sala/cadastrar";
-		salaService.salvarSala(sala);
+		Sala salaSalva = salaService.salvarSala(sala);
+		Bloco bloco = salaSalva.getBloco();
+		
+		bloco = this.adicionarSalaBloco(bloco, salaSalva);
+		blocoService.salvarBloco(bloco);
+		
+		if(salaSalva.getBeacon() != null){
+			Beacon beacon = salaSalva.getBeacon();
+			beacon.setSala(salaSalva);
+			beaconService.salvarBeacon(beacon);
+		}
+		
 		return "redirect:/sala/listar_salas";
 	}
 	
 	@GetMapping("/deletar/{id}")
 	public String deletarSala(@PathVariable("id") Integer id) {
 		Sala sala = salaService.buscarSala(id);
+		
+		Bloco bloco = sala.getBloco();
+		bloco = this.removerrSalaBloco(bloco, sala);
+		blocoService.salvarBloco(bloco);
+		
+		if(sala.getBeacon() != null){
+			Beacon beacon = sala.getBeacon();
+			beacon.setSala(null);
+			beaconService.salvarBeacon(beacon);
+		}
+		
 		salaService.deletarSala(sala);
 		return "redirect:/sala/listar_salas";
 	}
@@ -72,6 +101,22 @@ public class SalaController {
 	public String editarSala(@Valid Sala sala, BindingResult result) {	
 		salaService.salvarSala(sala);
 		return "redirect:/sala/listar_salas";
+	}
+	
+	public Bloco adicionarSalaBloco(Bloco bloco, Sala sala) {
+		List<Sala> salas = bloco.getSalas();
+		salas.add(sala);
+		bloco.setSalas(salas);
+		
+		return bloco;
+	}
+	
+	public Bloco removerrSalaBloco(Bloco bloco, Sala sala) {
+		List<Sala> salas = bloco.getSalas();
+		salas.remove(sala);
+		bloco.setSalas(salas);
+		
+		return bloco;
 	}
 	
 }

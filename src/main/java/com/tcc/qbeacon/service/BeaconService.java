@@ -30,4 +30,8 @@ public class BeaconService {
 		beaconRepo.delete(beacon);
 	}
 	
+	public List<Beacon> pegarBeaconsValidos () {
+		return beaconRepo.beaconsValidos();
+	}
+
 }

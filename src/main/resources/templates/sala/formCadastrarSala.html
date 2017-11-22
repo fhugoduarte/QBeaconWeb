@@ -74,6 +74,25 @@
 								</select>
           					</div>
           				</div> <br/>
+          				<div class="form-group">
+          					<label>Beacon</label> <br/><br/>
+          					<div class="input-group">
+          						<span class="input-group-addon">
+          							<i class="fa fa-bluetooth"></i>
+          						</span>
+          						<select th:if="${sala.beacon != null}" class="form-control" th:field="*{beacon}" 
+          								autofocus="true" disabled="disabled">
+  									<option th:value="${sala.beacon.id}"
+  										 th:text="${sala.beacon.nome}"></option>
+								</select>
+          						<select th:unless="${sala.beacon != null}" class="form-control" th:field="*{beacon}" 
+          								autofocus="true">
+          							<option th:value="${null}"> Nenhum </option>
+  									<option th:each="beacon : ${beacons}" th:value="${beacon.id}"
+  										 th:text="${beacon.nome}"></option>
+								</select>
+          					</div>
+          				</div> <br/>
           				<div class="form-group row">
 							<div class="col-sm-3"></div>
 							<button class="btn btn-primary col-sm-6" type="submit">Cadastrar</button>
