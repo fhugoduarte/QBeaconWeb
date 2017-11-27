@@ -78,14 +78,24 @@ public class CampusController {
 	@GetMapping("/editar/{id}")
 	public ModelAndView editarCampus(@PathVariable("id") Integer id) {
 		Campus campus = campusService.buscarCampus(id);
+		List<Instituicao> instituicoes = instituicaoService.pegarInstituicoes();
+		
 		ModelAndView model = new ModelAndView("campus/formEditarCampus");
+		model.addObject("instituicoes", instituicoes);
 		model.addObject("campus", campus);
 		return model;
 	}
 	
 	@PostMapping("/editar")
-	public String editarCampus(@Valid Campus campus, BindingResult result) {	
-		campusService.salvarCampus(campus);
+	public String editarCampus(@Valid Campus campus, BindingResult result) {
+		Campus velho = campusService.buscarCampus(campus.getId());
+		Instituicao instituicaoVelha = velho.getInstituicao();
+		
+		Campus campusSalvo = campusService.salvarCampus(campus);
+		
+		if(!campus.getInstituicao().equals(instituicaoVelha))
+			this.alterarInstituicao(instituicaoVelha, campusSalvo.getInstituicao(), campusSalvo);
+		
 		return "redirect:/campus/listar_campus";
 	}
 	
@@ -142,5 +152,19 @@ public class CampusController {
 		instituicao.setCampus(lcampus);
 		
 		return instituicao;
+	}
+	
+	public void alterarInstituicao (Instituicao antiga, Instituicao nova, Campus campus) {
+		
+		List<Campus> lcampus = antiga.getCampus();
+		lcampus.remove(campus);
+		antiga.setCampus(lcampus);
+		instituicaoService.salvarInstituicao(antiga);
+		
+		lcampus = nova.getCampus();
+		lcampus.add(campus);
+		nova.setCampus(lcampus);
+		instituicaoService.salvarInstituicao(nova);
+		
 	}
 }

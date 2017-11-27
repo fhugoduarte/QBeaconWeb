@@ -92,15 +92,40 @@ public class SalaController {
 	@GetMapping("/editar/{id}")
 	public ModelAndView editarSala(@PathVariable("id") Integer id) {
 		Sala sala = salaService.buscarSala(id);
+		List<Bloco> blocos = blocoService.pegarBlocos();
+		List<Beacon>beacons = beaconService.pegarBeaconsValidos();
+		
 		ModelAndView model = new ModelAndView("sala/formEditarSala");
 		model.addObject("sala", sala);
+		model.addObject("blocos", blocos);
+		model.addObject("beacons", beacons);
 		return model;
 	}
 	
 	@PostMapping("/editar")
 	public String editarSala(@Valid Sala sala, BindingResult result) {	
-		salaService.salvarSala(sala);
+		Sala velha = salaService.buscarSala(sala.getId());
+		Beacon beaconVelho = velha.getBeacon();
+		Bloco blocoVelho = velha.getBloco();
+		
+		Sala salaSalva = salaService.salvarSala(sala);
+		
+		if(!salaSalva.getBloco().equals(blocoVelho))
+			this.alterarBloco(blocoVelho, salaSalva.getBloco(), salaSalva);
+
+		if(salaSalva.getBeacon() != beaconVelho)
+			this.alterarBeacon(beaconVelho, salaSalva.getBeacon(), salaSalva);
+		
 		return "redirect:/sala/listar_salas";
+	}
+	
+	@GetMapping("/{id}")
+	public ModelAndView visualizarSala(@PathVariable("id") Integer id) {
+		Sala sala = salaService.buscarSala(id);
+		ModelAndView model = new ModelAndView("sala/detalhesSala");
+		model.addObject("sala", sala);
+		
+		return model;
 	}
 	
 	public Bloco adicionarSalaBloco(Bloco bloco, Sala sala) {
@@ -117,6 +142,34 @@ public class SalaController {
 		bloco.setSalas(salas);
 		
 		return bloco;
+	}
+	
+	public void alterarBloco (Bloco antigo, Bloco novo, Sala sala) {
+		
+		List<Sala> salas = antigo.getSalas();
+		salas.remove(sala);
+		antigo.setSalas(salas);
+		blocoService.salvarBloco(antigo);
+		
+		salas = novo.getSalas();
+		salas.add(sala);
+		novo.setSalas(salas);
+		blocoService.salvarBloco(novo);
+		
+	}
+	
+public void alterarBeacon (Beacon antigo, Beacon novo, Sala sala) {
+		
+		if(antigo != null) {
+			antigo.setSala(null);
+			beaconService.salvarBeacon(antigo);
+		}
+		
+		if(novo != null) {
+			novo.setSala(sala);
+			beaconService.salvarBeacon(novo);
+		}
+		
 	}
 	
 }

@@ -47,9 +47,6 @@
           					th:field="*{id}"
           					th:value="${bloco.id}" />
           				<input	type="hidden"
-          					th:field="*{campus}"
-          					th:value="${bloco.campus}" />
-          				<input	type="hidden"
           					th:field="*{salas}"
           					th:value="${bloco.salas}" />
           					
@@ -62,6 +59,22 @@
           						<input type="text" id="inputNome" class="form-control"
 								placeholder="Nome" th:field="*{nome}" required="true"
 								autofocus="true" />
+          					</div>
+          				</div> <br/>
+          				
+          				<div class="form-group">
+          					<label>Campus</label> <br/><br/>
+          					<div class="input-group">
+          						<span class="input-group-addon">
+          							<i class="glyphicon glyphicon-home"></i>
+          						</span>
+          						<select class="form-control" th:field="*{campus}" 
+          								required="true" autofocus="true">
+          							<option th:value="${bloco.campus.id}" selected="selected"
+          									th:text="${bloco.campus.nome} + ' - ' + ${bloco.campus.instituicao.nome}" ></option>
+  									<option th:each="camp : ${campus}" th:if="${bloco.campus != camp}" th:value="${camp.id}"
+  									 		th:text="${camp.nome} + ' - ' + ${camp.instituicao.nome}"></option>
+								</select>
           					</div>
           				</div> <br/>
           				<div class="form-group row">

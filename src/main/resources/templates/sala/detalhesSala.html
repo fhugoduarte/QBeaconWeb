@@ -3,7 +3,7 @@
 	xmlns:th="http://www.thymeleaf.org">
 
 <head>
-<title th:text="${bloco.nome}"></title>
+<title th:text="${sala.nome}"></title>
 
 <!-- CorBase = #4B0082 -->
 
@@ -32,47 +32,59 @@
 		<!-- WHITE BOX -->
 		<div class="white-box" style="margin-top: 100px;">
 			<div class="container">
-				<div class="row" align="center"><h2>Detalhes do Bloco</h2></div><br/>
+				<div class="row" align="center"><h2>Detalhes da Sala</h2></div><br/>
 				<div class="row">
 					<div class="col-sm-8"></div>
 					<div class="col-sm-4">
-						<a class="btn btn-warning btn-sm" th:href="@{${'/bloco/editar/'+bloco.id}}" title="Editar">
+						<a class="btn btn-warning btn-sm" th:href="@{${'/sala/editar/'+sala.id}}" title="Editar">
 							Editar
 						</a>
-						<a class="btn btn-danger btn-sm" th:href="@{${'/bloco/deletar/'+bloco.id}}" title="Deletar">
+						<a class="btn btn-danger btn-sm" th:href="@{${'/sala/deletar/'+sala.id}}" title="Deletar">
 							Deletar
 						</a>
 					</div>
 				</div>
 				<div class="row" align="center">
-					<img id="bloco_img" class="img-circle"
-						src="/images/blocoLogo.png" height="150" width="150"/>
-				</div>
+					<img id="sala_img" class="img-circle"
+						src="/images/logoSala.png" height="150" width="150"/>
+				</div> <br/>
 				<div class="row" align="center">
-					<h2 th:text="'- ' + ${bloco.campus.instituicao.nome} + ' -'"></h2>
-					<h3 th:text="${bloco.campus.nome}"></h3> <br/> <br/>
-					<h1 th:text="${bloco.nome}"></h1>
+					<h2 th:text="'- ' + ${sala.bloco.campus.instituicao.nome} + ' -'"></h2>
+					<h3 th:text="${sala.bloco.campus.nome} + ' / ' + ${sala.bloco.nome}"></h3>
+					<h1 th:text="${sala.nome}"></h1><br/> <br/>
 				</div>
 				<br/><br/><br/>
+				
+				<div class="row">
+					<div class="col-sm-3"></div>
+					<div th:if="${sala.beacon != null}" class="alert alert-success col-sm-6" role="alert">
+						<span th:text="'Beacon cadastrado : ' + ${sala.beacon.nome}"></span>
+					</div>
+					<div th:unless="${sala.beacon != null}" class="alert alert-danger col-sm-6" role="alert">
+						<span th:unless="${sala.beacon != null}"> Não possui Beacon cadastrado! </span>
+					</div>
+					<div class="col-sm-3"></div>
+				</div><br/><br/>
+				
 				<div class="row">
 					<div class="col-sm-3"></div>
 					<div class="card card-container row col-sm-6">
 						<table class="table table-striped">
 						  <thead class="thead-dark">
 						    <tr>
-						    	<th scope="col"><h4>Lista de Salas</h4></th>
+						    	<th scope="col"><h4>Lista de Reservas</h4></th>
 						    	<th></th>
 						    	<th>
-						    		<a th:href="@{${'/bloco/'+bloco.id+'/criar_sala'}}"
+						    		<a th:href="@{${'/sala/'+sala.id+'/criar_reserva'}}"
 						    			class="btn btn-success btn-sm">
-						    			Criar nova Sala
+						    			Criar nova Reserva
 						    		</a>
 						    	</th>
 						    </tr>
 						  </thead>
 						  <tbody>
-						    <tr th:each="sala : ${bloco.salas}">
-						      <td><a th:text="${sala.nome}" th:href="@{${'/sala/'+sala.id}}" title="Detalhes"></a></td>
+						    <tr th:each="reserva : ${sala.reservas}">
+						      <td><a th:text="${reserva.id}" th:href="#" title="Detalhes"></a></td>
 						      <td></td>
 						      <td></td>
 						    </tr>

@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.tcc.qbeacon.model.Beacon;
 import com.tcc.qbeacon.model.Bloco;
 import com.tcc.qbeacon.model.Campus;
 import com.tcc.qbeacon.model.Sala;
+import com.tcc.qbeacon.service.BeaconService;
 import com.tcc.qbeacon.service.BlocoService;
 import com.tcc.qbeacon.service.CampusService;
 import com.tcc.qbeacon.service.SalaService;
@@ -32,6 +34,9 @@ public class BlocoController {
 	
 	@Autowired
 	CampusService campusService;
+	
+	@Autowired
+	BeaconService beaconService;
 	
 	@GetMapping(path="/listar_blocos")
 	public ModelAndView listaBlocos() {
@@ -78,14 +83,24 @@ public class BlocoController {
 	@GetMapping("/editar/{id}")
 	public ModelAndView editarBloco(@PathVariable("id") Integer id) {
 		Bloco bloco = blocoService.buscarBloco(id);
+		List<Campus> campus = campusService.pegarTodosCampus();
+		
 		ModelAndView model = new ModelAndView("bloco/formEditarBloco");
 		model.addObject("bloco", bloco);
+		model.addObject("campus", campus);
 		return model;
 	}
 	
 	@PostMapping("/editar")
-	public String editarBloco(@Valid Bloco bloco, BindingResult result) {	
-		blocoService.salvarBloco(bloco);
+	public String editarBloco(@Valid Bloco bloco, BindingResult result) {
+		Bloco velho = blocoService.buscarBloco(bloco.getId());
+		Campus campusVelho = velho.getCampus();
+		
+		Bloco blocoSalvo = blocoService.salvarBloco(bloco);
+		
+		if(!bloco.getCampus().equals(campusVelho))
+			this.alterarCampus(campusVelho, blocoSalvo.getCampus(), blocoSalvo);
+		
 		return "redirect:/bloco/listar_blocos";
 	}
 	
@@ -100,9 +115,15 @@ public class BlocoController {
 	
 	@GetMapping("/{id_bloco}/criar_sala")
 	public ModelAndView criarSala(@PathVariable("id_bloco") Integer id_bloco) {
-		ModelAndView model = new ModelAndView("sala/formCadastrarSala");
+		List<Beacon> beacons = beaconService.pegarBeaconsValidos();
 		
-		model.addObject("sala", new Sala());
+		Bloco bloco = blocoService.buscarBloco(id_bloco);
+		Sala sala = new Sala();
+		sala.setBloco(bloco);
+		
+		ModelAndView model = new ModelAndView("sala/formCadastrarSala");
+		model.addObject("sala", sala);
+		model.addObject("beacons", beacons);
 		return model;
 	}
 	
@@ -118,6 +139,12 @@ public class BlocoController {
 		List<Sala> salas = bloco.getSalas();
 		salas.add(salaSalva);
 		bloco.setSalas(salas);
+		
+		if(salaSalva.getBeacon() != null){
+			Beacon beacon = salaSalva.getBeacon();
+			beacon.setSala(salaSalva);
+			beaconService.salvarBeacon(beacon);
+		}
 		
 		blocoService.salvarBloco(bloco);
 		
@@ -139,6 +166,20 @@ public class BlocoController {
 		campus.setBlocos(blocos);
 		
 		return campus;
+	}
+	
+	public void alterarCampus (Campus antigo, Campus novo, Bloco bloco) {
+		
+		List<Bloco> blocos = antigo.getBlocos();
+		blocos.remove(bloco);
+		antigo.setBlocos(blocos);
+		campusService.salvarCampus(antigo);
+		
+		blocos = novo.getBlocos();
+		blocos.add(bloco);
+		novo.setBlocos(blocos);
+		campusService.salvarCampus(novo);
+		
 	}
 	
 }
