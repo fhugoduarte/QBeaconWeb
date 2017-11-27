@@ -1,37 +1,94 @@
 <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
 
-<html
-	xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
->
-	<head>
-		<title th:text="${campus.nome}"></title>
-		<meta name="_csrf" content="${_csrf.token}"/>
-    	<!-- default header name is X-CSRF-TOKEN -->
-    	<meta name="_csrf_header" content="${_csrf.headerName}"/>
-	</head>
-	<body>
+<head>
+<title th:text="${campus.nome}"></title>
+
+<!-- CorBase = #4B0082 -->
+
+<meta name="_csrf" content="${_csrf.token}" />
+<!-- default header name is X-CSRF-TOKEN -->
+<meta name="_csrf_header" content="${_csrf.headerName}" />
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<link rel="icon" type="image/png" sizes="20x20"
+	th:href="@{/images/logoQBeacon.png}" />
+<link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet" />
+<link th:href="@{/css/footer.css}" rel="stylesheet" />
+<link href="navbar-fixed-top.css" rel="stylesheet" />
+
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" />
+
+</head>
+<body>
+	
+	<div class="container">
+		<!-- HEADER -->
+		<div th:replace="fragments/header :: header"></div>
+			
+		<!-- WHITE BOX -->
+		<div class="white-box" style="margin-top: 100px;">
+			<div class="container">
+				<div class="row" align="center"><h2>Detalhes do Campus</h2></div><br/>
+				<div class="row">
+					<div class="col-sm-8"></div>
+					<div class="col-sm-4">
+						<a class="btn btn-warning btn-sm" th:href="@{${'/campus/editar/'+campus.id}}" title="Editar">
+							Editar
+						</a>
+						<a class="btn btn-danger btn-sm" th:href="@{${'/campus/deletar/'+campus.id}}" title="Deletar">
+							Deletar
+						</a>
+					</div>
+				</div>
+				<div class="row" align="center">
+					<img id="campus_img" class="img-circle"
+						src="/images/campusLogo.png" height="150" width="150"/>
+				</div>
+				<div class="row" align="center">
+					<h3 th:text="'- ' + ${campus.instituicao.nome} + ' -'"></h3> <br/>
+					<h1 th:text="${campus.nome}"></h1>
+				</div>
+				<br/><br/><br/>
+				<div class="row">
+					<div class="col-sm-3"></div>
+					<div class="card card-container row col-sm-6">
+						<table class="table table-striped">
+						  <thead class="thead-dark">
+						    <tr>
+						    	<th scope="col"><h4>Lista de Blocos</h4></th>
+						    	<th></th>
+						    	<th>
+						    		<a th:href="@{${'/campus/'+campus.id+'/criar_bloco'}}"
+						    			class="btn btn-success btn-sm">
+						    			Criar novo Bloco
+						    		</a>
+						    	</th>
+						    </tr>
+						  </thead>
+						  <tbody>
+						    <tr th:each="bloco : ${campus.blocos}">
+						      <td><a th:text="${bloco.nome}" th:href="@{${'/bloco/'+bloco.id}}" title="Detalhes"></a></td>
+						      <td></td>
+						      <td></td>
+						    </tr>
+						  </tbody>
+						</table>
+					</div>
+					<div class="col-sm-3"></div>
+				</div>
+			</div>
+		</div><!-- End to White Box -->
 		
-		<h2>Detalhes do Campus</h2>
-		<h3><center><b th:text="${campus.nome}"></b></center></h3>
-		<table>
-			<thead>
-				<tr>
-					<th>Lista de Blocos deste Campus</th>
-					<th>Ações</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="bloco : ${campus.blocos}">
-					<td th:text="${bloco.nome}"></td>
-					<td>
-						<a th:href="@{${'/bloco/'+bloco.id}}">Detalhes</a>
-					</td>
-				</tr>
-			</tbody>
-		</table><br/>
-		<a th:href="@{${'/campus/'+campus.id+'/criar_bloco'}}">Criar novo Bloco</a><br/><br/>		
-		<a th:href="@{/campus/cadastrar}">Cadastrar Campus</a>
-	</body>
+		<!-- FOOTER -->
+		<div th:include="fragments/footer :: footer"></div>
+		
+	</div>
+		
+	<script th:src="@{/bootstrap/js/jquery.js}"></script>
+	<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+</body>
 </html>

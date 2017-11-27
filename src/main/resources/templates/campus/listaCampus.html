@@ -32,7 +32,12 @@
 		<!-- WHITE BOX -->
 		<div class="white-box" style="margin-top: 100px;">
 			<div class="container">
-				<h1> Lista  de Campus</h1><br/><br/>
+				<h1> Lista  de Campus</h1>
+				<div class="col-sm-3"></div>
+				<a th:href="@{${'/campus/cadastrar/'}}"
+					class="btn btn-success btn-sm">
+					<strong>Novo</strong>
+				</a><br/><br/><br/><br/>
 				<div class="card card-container  row">
 					<table class="table table-striped">
 					  <thead class="thead-dark">
