@@ -90,7 +90,7 @@
 						  </thead>
 						  <tbody>
 						    <tr th:each="reserva : ${sala.reservas}">
-						      <td><a th:text="${reserva.id}" th:href="#" title="Detalhes"></a></td>
+						      <td><a th:text="${reserva.turma.professor} + ' - ' + ${reserva.turma.disciplina.nome}" th:href="#" title="Detalhes"></a></td>
 						      <td></td>
 						      <td></td>
 						    </tr>

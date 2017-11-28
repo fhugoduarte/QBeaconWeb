@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.tcc.qbeacon.model.Campus;
 import com.tcc.qbeacon.model.Disciplina;
 import com.tcc.qbeacon.model.Turma;
 import com.tcc.qbeacon.service.DisciplinaService;
