@@ -60,7 +60,12 @@
           						<span class="input-group-addon">
           							<i class="fa fa-book"></i>
           						</span>
-          						<select class="form-control" th:field="*{disciplina}" 
+          						<select th:if="${turma.disciplina != null}" class="form-control" th:field="*{disciplina}" 
+          								required="true" autofocus="true" disabled="disabled">
+  									<option th:value="${turma.disciplina.id}"
+  										 th:text="${turma.disciplina.nome}"></option>
+								</select>
+          						<select th:unless="${turma.disciplina != null}" class="form-control" th:field="*{disciplina}" 
           								required="true" autofocus="true">
   									<option th:each="disciplina : ${disciplinas}" th:value="${disciplina.id}"
   										 th:text="${disciplina.nome}"></option>

@@ -68,7 +68,7 @@ public class SalaController {
 			beaconService.salvarBeacon(beacon);
 		}
 		
-		return "redirect:/sala/listar_salas";
+		return "redirect:/sala/" + salaSalva.getId();
 	}
 	
 	@GetMapping("/deletar/{id}")
@@ -116,15 +116,58 @@ public class SalaController {
 		if(salaSalva.getBeacon() != beaconVelho)
 			this.alterarBeacon(beaconVelho, salaSalva.getBeacon(), salaSalva);
 		
-		return "redirect:/sala/listar_salas";
+		return "redirect:/sala/" + salaSalva.getId();
 	}
 	
 	@GetMapping("/{id}")
 	public ModelAndView visualizarSala(@PathVariable("id") Integer id) {
 		Sala sala = salaService.buscarSala(id);
+		List<Beacon> beacons = beaconService.pegarBeaconsValidos();
+		
 		ModelAndView model = new ModelAndView("sala/detalhesSala");
 		model.addObject("sala", sala);
+		model.addObject("beacons", beacons);
 		
+		return model;
+	}
+	
+	@GetMapping("/{id_sala}/adicionar_beacon/{id_beacon}")
+	public String adicionarBeacon(@PathVariable("id_sala") Integer id_sala, @PathVariable("id_beacon") Integer id_beacon) {
+		Sala sala = salaService.buscarSala(id_sala);
+		Beacon beacon = beaconService.buscarBeacon(id_beacon);
+		
+		sala.setBeacon(beacon);
+		salaService.salvarSala(sala);
+		
+		beacon.setSala(sala);
+		beaconService.salvarBeacon(beacon);
+			
+		return "redirect:/sala/"+ sala.getId();
+	}
+	
+	@GetMapping("/{id_sala}/remover_beacon/{id_beacon}")
+	public String removerBeacon(@PathVariable("id_sala") Integer id_sala, @PathVariable("id_beacon") Integer id_beacon) {
+		Sala sala = salaService.buscarSala(id_sala);
+		Beacon beacon = beaconService.buscarBeacon(id_beacon);
+		
+		sala.setBeacon(null);
+		salaService.salvarSala(sala);
+		
+		beacon.setSala(null);
+		beaconService.salvarBeacon(beacon);
+			
+		return "redirect:/sala/"+ sala.getId();
+	}
+	
+	@GetMapping("/{id_sala}/criar_beacon")
+	public ModelAndView criarBeacon(@PathVariable("id_sala") Integer id_sala) {
+		Sala sala = salaService.buscarSala(id_sala);
+		
+		Beacon beacon = new Beacon();
+		beacon.setSala(sala);
+		
+		ModelAndView model = new ModelAndView("sala/formCadastrarSala");
+		model.addObject("beacon", beacon);
 		return model;
 	}
 	
@@ -158,7 +201,7 @@ public class SalaController {
 		
 	}
 	
-public void alterarBeacon (Beacon antigo, Beacon novo, Sala sala) {
+	public void alterarBeacon (Beacon antigo, Beacon novo, Sala sala) {
 		
 		if(antigo != null) {
 			antigo.setSala(null);

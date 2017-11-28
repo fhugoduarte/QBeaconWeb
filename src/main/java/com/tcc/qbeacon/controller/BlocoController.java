@@ -65,7 +65,7 @@ public class BlocoController {
 		campus = this.adicionarBlocoCampus(campus, blocoSalvo);
 		campusService.salvarCampus(campus);
 
-		return "redirect:/bloco/listar_blocos";
+		return "redirect:/bloco/" + blocoSalvo.getId();
 	}
 	
 	@GetMapping("/deletar/{id}")
@@ -101,7 +101,7 @@ public class BlocoController {
 		if(!bloco.getCampus().equals(campusVelho))
 			this.alterarCampus(campusVelho, blocoSalvo.getCampus(), blocoSalvo);
 		
-		return "redirect:/bloco/listar_blocos";
+		return "redirect:/bloco/" + blocoSalvo.getId();
 	}
 	
 	@GetMapping("/{id}")

@@ -1,42 +1,80 @@
 <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
 
-<html
-	xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
->
-	<head>
-		<title>DISCIPLINAS</title>
-		<meta name="_csrf" content="${_csrf.token}"/>
-    	<!-- default header name is X-CSRF-TOKEN -->
-    	<meta name="_csrf_header" content="${_csrf.headerName}"/>
-	</head>
-	<body>
+<head>
+<title>Disciplinas</title>
+
+<!-- CorBase = #4B0082 -->
+
+<meta name="_csrf" content="${_csrf.token}" />
+<!-- default header name is X-CSRF-TOKEN -->
+<meta name="_csrf_header" content="${_csrf.headerName}" />
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<link rel="icon" type="image/png" sizes="20x20"
+	th:href="@{/images/logoQBeacon.png}" />
+<link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet" />
+<link th:href="@{/css/footer.css}" rel="stylesheet" />
+<link href="navbar-fixed-top.css" rel="stylesheet" />
+
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" />
+
+</head>
+<body>
+	
+	<div class="container">
+		<!-- HEADER -->
+		<div th:replace="fragments/header :: header"></div>
 		
-		<h2>Lista de Disciplinas</h2>
+		<!-- WHITE BOX -->
+		<div class="white-box" style="margin-top: 100px;">
+			<div class="container">
+				<h1> Lista  de Disciplinas</h1>
+				<div class="col-sm-3"></div>
+				<a th:href="@{${'/disciplina/cadastrar/'}}"
+					class="btn btn-success btn-sm">
+					<strong>Nova</strong>
+				</a><br/><br/><br/><br/>
+				<div class="card card-container  row">
+					<table class="table table-striped">
+					  <thead class="thead-dark">
+					    <tr>
+					      <th scope="col" class=" col-sm-1"></th>
+					      <th scope="col"  class=" col-sm-9">Disciplina</th>
+					      <th scope="col" class=" col-sm-3">Ações</th>
+					    </tr>
+					  </thead>
+					  <tbody>
+					    <tr th:each="disciplina : ${disciplinas}">
+					      <th scope="row"><i class="fa fa-book"></i></th>
+					      <td><a th:text="${disciplina.nome}" th:href="@{${'/disciplina/'+disciplina.id}}" title="Detalhes"></a></td>
+					      <td>
+					      	<a class="btn btn-primary btn-sm" th:href="@{${'/disciplina/'+disciplina.id}}" title="Detalhes">
+					      		<i class="fa fa-search-plus"></i>
+					      	</a>
+					      	<a class="btn btn-warning btn-sm" th:href="@{${'/disciplina/editar/'+disciplina.id}}" title="Editar">
+					      		<i class="fa fa-pencil-square-o"></i>
+					      	</a>
+					      	<a class="btn btn-danger btn-sm" th:href="@{${'/disciplina/deletar/'+disciplina.id}}" title="Deletar">
+					      		<i class="fa fa-trash-o"></i>
+					      	</a>
+					      </td>
+					    </tr>
+					  </tbody>
+					</table>
+				</div>
+			</div>
+		</div><!-- End to White Box -->
 		
-		<table>
-			<thead>
-				<tr>
-					<th>Nome</th>
-					<th>Ações</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="disciplina : ${disciplinas}">
-					<td th:text="${disciplina.nome}"></td>
-					<td>
-						<a th:href="@{${'/disciplina/deletar/'+disciplina.id}}">
-							Deletar
-						</a>
-						<a th:href="@{${'/disciplina/editar/'+disciplina.id}}">
-							Editar
-						</a>
-					</td>
-				</tr>
-			</tbody>
-		</table>
+		<!-- FOOTER -->
+		<div th:include="fragments/footer :: footer"></div>
 		
-		<a th:href="@{/disciplina/cadastrar}">Cadastrar Disciplina</a>
-	</body>
+	</div>
+		
+	<script th:src="@{/bootstrap/js/jquery.js}"></script>
+	<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+</body>
 </html>

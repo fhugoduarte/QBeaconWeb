@@ -3,7 +3,7 @@
 	xmlns:th="http://www.thymeleaf.org">
 
 <head>
-<title th:text="${sala.nome}"></title>
+<title th:text="${disciplina.nome}"></title>
 
 <!-- CorBase = #4B0082 -->
 
@@ -20,7 +20,7 @@
 <link th:href="@{/css/footer.css}" rel="stylesheet" />
 <link href="navbar-fixed-top.css" rel="stylesheet" />
 
-<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" />
 
 </head>
 <body>
@@ -32,65 +32,45 @@
 		<!-- WHITE BOX -->
 		<div class="white-box" style="margin-top: 100px;">
 			<div class="container">
-				<div class="row" align="center"><h2>Detalhes da Sala</h2></div><br/>
+				<div class="row" align="center"><h2>Detalhes da Disciplina</h2></div><br/>
 				<div class="row">
 					<div class="col-sm-8"></div>
 					<div class="col-sm-4">
-						<a class="btn btn-warning btn-sm" th:href="@{${'/sala/editar/'+sala.id}}" title="Editar">
+						<a class="btn btn-warning btn-sm" th:href="@{${'/disciplina/editar/'+disciplina.id}}" title="Editar">
 							Editar
 						</a>
-						<a class="btn btn-danger btn-sm" th:href="@{${'/sala/deletar/'+sala.id}}" title="Deletar">
+						<a class="btn btn-danger btn-sm" th:href="@{${'/disciplina/deletar/'+disciplina.id}}" title="Deletar">
 							Deletar
 						</a>
 					</div>
 				</div>
 				<div class="row" align="center">
-					<img id="sala_img" class="img-circle"
-						src="/images/logoSala.png" height="150" width="150"/>
+					<img id="disciplina_img" class="img-circle"
+						src="/images/logoDisciplina.png" height="150" width="150"/>
 				</div> <br/>
 				<div class="row" align="center">
-					<h2 th:text="'- ' + ${sala.bloco.campus.instituicao.nome} + ' / ' + ${sala.bloco.campus.nome} + ' -'"></h2>
-					<h3 th:text="${sala.bloco.nome}"></h3>
-					<h1 th:text="${sala.nome}"></h1><br/> <br/>
+					<h1 th:text="${disciplina.nome}"></h1>
 				</div>
 				<br/><br/><br/>
-				
-				<div class="row">
-					<div class="col-sm-3"></div>
-					<div th:if="${sala.beacon != null}" class="alert alert-success col-sm-6" role="alert">
-						<span>Beacon cadastrado : </span> 
-						<strong><a th:href="@{${'/beacon/'+sala.beacon.id}}" th:text="${sala.beacon.nome}"></a></strong>
-						<a class="btn btn-danger btn-sm" title="Remover"
-							th:href="@{${'/sala/' + sala.id + '/remover_beacon/' + sala.beacon.id}}" >
-					    	<i class="fa fa-close"></i>
-					    </a>
-					</div>
-					<div th:unless="${sala.beacon != null}" class="alert alert-danger col-sm-6" role="alert">
-						<span th:unless="${sala.beacon != null}"> Não possui Beacon cadastrado!
-							 Clique em <strong>editar</strong> para adicionar um novo Beacon.</span>
-					</div>
-					<div class="col-sm-3"></div>
-				</div><br/><br/>
-				
 				<div class="row">
 					<div class="col-sm-3"></div>
 					<div class="card card-container row col-sm-6">
 						<table class="table table-striped">
 						  <thead class="thead-dark">
 						    <tr>
-						    	<th scope="col"><h4>Lista de Reservas</h4></th>
+						    	<th scope="col"><h4>Lista de Turmas</h4></th>
 						    	<th></th>
 						    	<th>
-						    		<a th:href="@{${'/sala/'+sala.id+'/criar_reserva'}}"
+						    		<a th:href="@{${'/disciplina/'+disciplina.id+'/criar_turma'}}"
 						    			class="btn btn-success btn-sm">
-						    			Criar nova Reserva
+						    			Criar nova Turma
 						    		</a>
 						    	</th>
 						    </tr>
 						  </thead>
 						  <tbody>
-						    <tr th:each="reserva : ${sala.reservas}">
-						      <td><a th:text="${reserva.id}" th:href="#" title="Detalhes"></a></td>
+						    <tr th:each="turma : ${disciplina.turmas}">
+						      <td><a th:text="${turma.professor}" th:href="@{${'/turma/'+turma.id}}" title="Detalhes"></a></td>
 						      <td></td>
 						      <td></td>
 						    </tr>

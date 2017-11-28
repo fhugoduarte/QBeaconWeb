@@ -14,8 +14,7 @@ import com.tcc.qbeacon.model.Sala;
 @Transactional
 public interface SalaRepository extends JpaRepository<Sala, Integer> {
 	@Query(value = "SELECT * FROM SALA s "
-			+ "WHERE s.id NOT IN "
-			+ "(SELECT salas_id FROM BLOCO_SALAS)",
+			+ "WHERE s.beacon_id IS NULL",
 			nativeQuery=true)
 	List<Sala> salasValidas();
 }

@@ -60,7 +60,7 @@ public class CampusController {
 		instituicao = this.adicionarCampusInstituicao(instituicao, campusSalvo);
 		instituicaoService.salvarInstituicao(instituicao);
 		
-		return "redirect:/campus/listar_campus";
+		return "redirect:/campus/" + campusSalvo.getId();
 	}
 	
 	@GetMapping("/deletar/{id}")
@@ -96,7 +96,7 @@ public class CampusController {
 		if(!campus.getInstituicao().equals(instituicaoVelha))
 			this.alterarInstituicao(instituicaoVelha, campusSalvo.getInstituicao(), campusSalvo);
 		
-		return "redirect:/campus/listar_campus";
+		return "redirect:/campus/" + campusSalvo.getId();
 	}
 	
 	@GetMapping("/{id}")

@@ -54,6 +54,27 @@
 								autofocus="true" />
           					</div>
           				</div> <br/>
+          				<div class="form-group">
+          					<label>Sala</label> <br/><br/>
+          					<div class="input-group">
+          						<span class="input-group-addon">
+          							<i class="glyphicon glyphicon-blackboard"></i>
+          						</span>
+          						<select th:if="${beacon.sala != null}" class="form-control" th:field="*{sala}" 
+          								required="true" autofocus="true" disabled="disabled">
+  									<option th:value="${beacon.sala.id}"
+  										 th:text="${beacon.sala.nome} + ' - ' + ${beacon.sala.bloco.nome} + ' - '
+  										  + ${beacon.sala.bloco.campus.nome} + ' - ' + ${beacon.sala.bloco.campus.instituicao.nome}"></option>
+								</select>
+          						<select th:unless="${beacon.sala != null}" class="form-control" th:field="*{sala}" 
+          								autofocus="true">
+          							<option th:value="${null}">Nenhum</option>
+  									<option th:each="sala : ${salas}" th:value="${sala.id}"
+  										 th:text="${sala.nome} + ' - ' + ${sala.bloco.nome} + ' - '
+  										  + ${sala.bloco.campus.nome} + ' - ' + ${sala.bloco.campus.instituicao.nome}"></option>
+								</select>
+          					</div>
+          				</div> <br/>
           				<div class="form-group row">
 							<div class="col-sm-3"></div>
 							<button class="btn btn-primary col-sm-6" type="submit">Cadastrar</button>

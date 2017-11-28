@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<title th:text="${beacon.nome}"></title>
+
+<!-- CorBase = #4B0082 -->
+
+<meta name="_csrf" content="${_csrf.token}" />
+<!-- default header name is X-CSRF-TOKEN -->
+<meta name="_csrf_header" content="${_csrf.headerName}" />
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<link rel="icon" type="image/png" sizes="20x20"
+	th:href="@{/images/logoQBeacon.png}" />
+<link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet" />
+<link th:href="@{/css/footer.css}" rel="stylesheet" />
+<link href="navbar-fixed-top.css" rel="stylesheet" />
+
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+</head>
+<body>
+	
+	<div class="container">
+		<!-- HEADER -->
+		<div th:replace="fragments/header :: header"></div>
+			
+		<!-- WHITE BOX -->
+		<div class="white-box" style="margin-top: 100px;">
+			<div class="container">
+				<div class="row" align="center"><h2>Detalhes da Beacon</h2></div><br/>
+				<div class="row">
+					<div class="col-sm-8"></div>
+					<div class="col-sm-4">
+						<a class="btn btn-warning btn-sm" th:href="@{${'/beacon/editar/'+beacon.id}}" title="Editar">
+							Editar
+						</a>
+						<a class="btn btn-danger btn-sm" th:href="@{${'/beacon/deletar/'+beacon.id}}" title="Deletar">
+							Deletar
+						</a>
+					</div>
+				</div>
+				<div class="row" align="center">
+					<img id="beacon_img" class="img-circle"
+						src="/images/logoBeacon.png" height="150" width="150"/>
+				</div> <br/>
+				<div class="row" align="center">
+					<h1 th:text="${beacon.nome}"></h1><br/> <br/>
+				</div>
+				<br/><br/><br/>
+				
+				<div class="row">
+					<div class="col-sm-3"></div>
+					<div th:if="${beacon.sala != null}" class="alert alert-success col-sm-6" role="alert">
+						<span>Sala referente a este beacon: </span> 
+						<strong><a th:href="@{${'/sala/'+beacon.sala.id}}"
+							th:text="${beacon.sala.nome} + ' - ' + ${beacon.sala.bloco.nome} + ' - ' 
+								+ ${beacon.sala.bloco.campus.nome} + ' - ' + ${beacon.sala.bloco.campus.instituicao.nome}"></a></strong>
+						<a class="btn btn-danger btn-sm" title="Remover"
+							th:href="@{${'/beacon/' + beacon.id + '/remover_sala/' + beacon.sala.id}}" >
+					    	<i class="fa fa-close"></i>
+					    </a>
+					</div>
+					<div th:unless="${beacon.sala != null}" class="alert alert-danger col-sm-6" role="alert">
+						<span> Não possui Sala cadastrada!
+							 Clique em <strong>editar</strong> para adicionar uma sala a este Beacon.</span>
+					</div>
+					<div class="col-sm-3"></div>
+				</div><br/><br/>
+			</div>
+		</div><!-- End to White Box -->
+		
+		<!-- FOOTER -->
+		<div th:include="fragments/footer :: footer"></div>
+		
+	</div>
+		
+	<script th:src="@{/bootstrap/js/jquery.js}"></script>
+	<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+</body>
+</html>

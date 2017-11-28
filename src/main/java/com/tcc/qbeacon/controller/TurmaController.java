@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.tcc.qbeacon.model.Campus;
 import com.tcc.qbeacon.model.Disciplina;
 import com.tcc.qbeacon.model.Turma;
 import com.tcc.qbeacon.service.DisciplinaService;
@@ -102,6 +103,15 @@ public class TurmaController {
 		turmaService.salvarTurma(turma);
 		
 		return "redirect:/turma/listar_turmas";
+	}
+	
+	@GetMapping("/{id}")
+	public ModelAndView visualizarTurma(@PathVariable("id") Integer id) {
+		Turma turma = turmaService.buscarTurma(id);
+		ModelAndView model = new ModelAndView("turma/detalhesTurma");
+		model.addObject("turma", turma);
+		
+		return model;
 	}
 	
 	public Disciplina adicionarTurmaDisciplina(Disciplina disciplina, Turma turma) {
