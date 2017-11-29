@@ -15,10 +15,15 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.tcc.qbeacon.model.Beacon;
 import com.tcc.qbeacon.model.Bloco;
+import com.tcc.qbeacon.model.Campus;
+import com.tcc.qbeacon.model.Reserva;
 import com.tcc.qbeacon.model.Sala;
+import com.tcc.qbeacon.model.Turma;
 import com.tcc.qbeacon.service.BeaconService;
 import com.tcc.qbeacon.service.BlocoService;
+import com.tcc.qbeacon.service.ReservaService;
 import com.tcc.qbeacon.service.SalaService;
+import com.tcc.qbeacon.service.TurmaService;
 
 @Controller
 @RequestMapping(path="/sala")
@@ -32,6 +37,12 @@ public class SalaController {
 	
 	@Autowired
 	BeaconService beaconService;
+	
+	@Autowired
+	TurmaService turmaService;
+	
+	@Autowired
+	ReservaService reservaService;
 	
 	@GetMapping(path="/listar_salas")
 	public ModelAndView listaSalas() {
@@ -157,6 +168,42 @@ public class SalaController {
 		beaconService.salvarBeacon(beacon);
 			
 		return "redirect:/sala/"+ sala.getId();
+	}
+	
+	@GetMapping("/{id_sala}/criar_reserva")
+	public ModelAndView criarReserva(@PathVariable("id_sala") Integer id_sala) {
+		Sala sala = salaService.buscarSala(id_sala);
+		List<Turma> turmas = turmaService.pegarTurmas();
+		
+		Reserva reserva = new Reserva();
+		reserva.setSala(sala);
+		
+		ModelAndView model = new ModelAndView("reserva/formCadastrarReserva");
+		model.addObject("reserva", reserva);
+		model.addObject("turmas", turmas);
+		return model;
+	}
+	
+	@PostMapping("/{id_sala}/criar_reserva")
+	public String salvarReserva(@PathVariable("id_sala") Integer id_sala,
+							@Valid Reserva reserva, BindingResult result) {
+		if (result.hasErrors()) return "redirect:/sala/"+id_sala+"/criar_reserva";
+		
+		Sala sala = salaService.buscarSala(id_sala);
+		reserva.setSala(sala);
+		Reserva reservaSalva = reservaService.salvarReserva(reserva);
+		
+		List<Reserva> reservas = sala.getReservas();
+		reservas.add(reservaSalva);
+		sala.setReservas(reservas);
+		salaService.salvarSala(sala);
+		
+		Turma turma = reserva.getTurma();
+		turma.setReserva(reservaSalva);
+		turmaService.salvarTurma(turma);
+		
+		return "redirect:/sala/"+sala.getId();
+		
 	}
 	
 	@GetMapping("/{id_sala}/criar_beacon")

@@ -77,7 +77,7 @@
           						<select th:unless="${reserva.turma != null}" class="form-control" th:field="*{turma}" 
           								autofocus="true" required="true">
   									<option th:each="turma : ${turmas}" th:value="${turma.id}"
-  										 th:text="${turma.professor} + ' - ' + ${sala.turma.disciplina.nome}"></option>
+  										 th:text="${turma.professor} + ' - ' + ${turma.disciplina.nome}"></option>
 								</select>
           					</div>
           				</div> <br/>
@@ -87,10 +87,9 @@
           						<span class="input-group-addon">
           							<i class="fa fa-clock-o"></i>
           						</span>
-          						<select class="form-control" th:field="*{horario.turno}" 
-          								autofocus="true">
-  									<option th:each="turno : ${turnos}" th:value="${turno}"
-  										 th:text="${turno.professor} + ' - ' + ${sala.turma.disciplina.nome}"></option>
+          						<select class="form-control" th:field="*{horarios[0].turno}" 
+          								autofocus="true" required="true">
+  									<option th:value="AB_MANHÃ"> 08:00 às 10:00 </option>
 								</select>
           					</div>
           				</div> <br/>
