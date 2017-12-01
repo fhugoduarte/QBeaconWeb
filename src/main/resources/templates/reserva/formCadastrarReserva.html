@@ -82,14 +82,35 @@
           					</div>
           				</div> <br/>
           				<div class="form-group">
+          					<label>Dia da Semana</label> <br/><br/>
+          					<div class="input-group">
+          						<span class="input-group-addon">
+          							<i class="fa fa-calendar"></i>
+          						</span>
+          						<select class="form-control" th:field="*{diaSemana}" 
+          								autofocus="true" required="true">
+  									<option th:value="SEGUNDA"> Segunda-Feira </option>
+  									<option th:value="TERÇA"> Terça-Feira </option>
+  									<option th:value="QUARTA"> Quarta-Feira </option>
+  									<option th:value="QUINTA"> Quinta-Feira </option>
+  									<option th:value="SEXTA"> Sexta-Feira </option>
+								</select>
+          					</div>
+          				</div> <br/>
+          				<div class="form-group">
           					<label>Horário</label> <br/><br/>
           					<div class="input-group">
           						<span class="input-group-addon">
           							<i class="fa fa-clock-o"></i>
           						</span>
-          						<select class="form-control" th:field="*{horarios[0].turno}" 
+          						<select class="form-control" th:field="*{horario}" 
           								autofocus="true" required="true">
   									<option th:value="AB_MANHÃ"> 08:00 às 10:00 </option>
+  									<option th:value="CD_MANHÃ"> 10:00 às 12:00 </option>
+  									<option th:value="AB_TARDE"> 13:30 às 15:30 </option>
+  									<option th:value="CD_TARDE"> 15:30 às 17:30 </option>
+  									<option th:value="AB_NOITE"> 18:00 às 20:00 </option>
+  									<option th:value="CD_NOITE"> 20:00 às 22:00 </option>
 								</select>
           					</div>
           				</div> <br/>

@@ -1,0 +1,6 @@
+	- CADASTRO DE RESERVAS -
+O dia da semana e o horário das reservas não estão sendo tratadas no momento do cadastro.
+Quando alguem vai fazer uma nova reserva ele pode reserva a sala em dia e horário repetido.
+Tenho que tratar para ele poder realizar uma reserva apenas nos horários que a sala tem 
+disponível.
+

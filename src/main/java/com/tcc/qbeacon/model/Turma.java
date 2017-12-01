@@ -20,7 +20,10 @@ public class Turma {
 	private String professor;
 	
 	@OneToOne
-	private Reserva reserva;
+	private Reserva reserva1;
+	
+	@OneToOne
+	private Reserva reserva2;
 	
 	@ManyToMany
 	private List<Usuario> alunos;
@@ -51,12 +54,20 @@ public class Turma {
 		this.professor = professor;
 	}
 
-	public Reserva getReserva() {
-		return reserva;
+	public Reserva getReserva1() {
+		return reserva1;
 	}
 
-	public void setReserva(Reserva reserva) {
-		this.reserva = reserva;
+	public void setReserva1(Reserva reserva1) {
+		this.reserva1 = reserva1;
+	}
+	
+	public Reserva getReserva2() {
+		return reserva2;
+	}
+
+	public void setReserva2(Reserva reserva2) {
+		this.reserva2 = reserva2;
 	}
 
 	public List<Usuario> getAlunos() {

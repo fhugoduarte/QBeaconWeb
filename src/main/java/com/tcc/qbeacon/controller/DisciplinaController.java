@@ -47,7 +47,7 @@ public class DisciplinaController {
 	public String salvarDisciplina(@Valid Disciplina disciplina, BindingResult result ) {
 		if (result.hasErrors()) return "redirect:/disciplina/cadastrar";
 		disciplinaService.salvarDisciplina(disciplina);
-		return "redirect:/disciplina/listar_disciplinas";
+		return "redirect:/disciplina/" + disciplina.getId();
 	}
 	
 	@GetMapping("/deletar/{id}")

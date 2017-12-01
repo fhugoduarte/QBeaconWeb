@@ -35,7 +35,10 @@ public class ReservaController {
 	@GetMapping("/cadastrar")
 	public ModelAndView cadastrarReserva() {
 		List<Sala> salas = salaService.pegarSalas();
+		salas = this.salasHorarioVago(salas);
+		
 		List<Turma> turmas = turmaService.pegarTurmas();
+		turmas = this.turmasSemDuasReservas(turmas);
 		
 		ModelAndView model = new ModelAndView("beacon/formCadastrarBeacon");
 		model.addObject("reserva", new Reserva());
@@ -50,15 +53,18 @@ public class ReservaController {
 		
 		Reserva reservaSalva = reservaService.salvarReserva(reserva);
 		
-		System.out.println(reservaSalva.getHorarios().get(0).getTurno());
-		
 		Sala sala = reservaSalva.getSala();
 		sala = this.adicionarReservaSala(sala, reservaSalva);
 		salaService.salvarSala(sala);
 		
 		Turma turma = reservaSalva.getTurma();
-		turma.setReserva(reservaSalva);
-		turmaService.salvarTurma(turma);		
+		if(turma.getReserva1() == null) {
+			turma.setReserva1(reservaSalva);
+			turmaService.salvarTurma(turma);
+		}else if(turma.getReserva2() == null) {
+			turma.setReserva2(reservaSalva);
+			turmaService.salvarTurma(turma);
+		}	
 		
 		return "redirect:/reserva/" + reservaSalva.getId();
 	}
@@ -69,6 +75,22 @@ public class ReservaController {
 		sala.setReservas(reservas);
 		
 		return sala;
+	}
+	
+	public List<Turma> turmasSemDuasReservas(List<Turma> turmas){
+		for (Turma turma : turmas) {
+			if(turma.getReserva1() != null && turma.getReserva2() != null)
+				turmas.remove(turma);
+		}
+		return turmas;
+	}
+	
+	public List<Sala> salasHorarioVago(List<Sala> salas){
+		for (Sala sala : salas) {
+			if(sala.getReservas().size() >= 30)
+				salas.remove(sala);
+		}
+		return salas;
 	}
 
 }

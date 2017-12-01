@@ -15,7 +15,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.tcc.qbeacon.model.Beacon;
 import com.tcc.qbeacon.model.Bloco;
-import com.tcc.qbeacon.model.Campus;
 import com.tcc.qbeacon.model.Reserva;
 import com.tcc.qbeacon.model.Sala;
 import com.tcc.qbeacon.model.Turma;
@@ -199,8 +198,13 @@ public class SalaController {
 		salaService.salvarSala(sala);
 		
 		Turma turma = reserva.getTurma();
-		turma.setReserva(reservaSalva);
-		turmaService.salvarTurma(turma);
+		if(turma.getReserva1() == null) {
+			turma.setReserva1(reservaSalva);
+			turmaService.salvarTurma(turma);
+		}else if(turma.getReserva2() == null) {
+			turma.setReserva2(reservaSalva);
+			turmaService.salvarTurma(turma);
+		}
 		
 		return "redirect:/sala/"+sala.getId();
 		
