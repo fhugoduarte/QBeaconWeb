@@ -86,7 +86,7 @@ public class SalaController {
 		Sala sala = salaService.buscarSala(id);
 		
 		Bloco bloco = sala.getBloco();
-		bloco = this.removerrSalaBloco(bloco, sala);
+		bloco = this.removerSalaBloco(bloco, sala);
 		blocoService.salvarBloco(bloco);
 		
 		if(sala.getBeacon() != null){
@@ -230,7 +230,7 @@ public class SalaController {
 		return bloco;
 	}
 	
-	public Bloco removerrSalaBloco(Bloco bloco, Sala sala) {
+	public Bloco removerSalaBloco(Bloco bloco, Sala sala) {
 		List<Sala> salas = bloco.getSalas();
 		salas.remove(sala);
 		bloco.setSalas(salas);

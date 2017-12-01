@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<title> Reserva </title>
+
+<!-- CorBase = #4B0082 -->
+
+<meta name="_csrf" content="${_csrf.token}" />
+<!-- default header name is X-CSRF-TOKEN -->
+<meta name="_csrf_header" content="${_csrf.headerName}" />
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<link rel="icon" type="image/png" sizes="20x20"
+	th:href="@{/images/logoQBeacon.png}" />
+<link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet" />
+<link th:href="@{/css/footer.css}" rel="stylesheet" />
+<link href="navbar-fixed-top.css" rel="stylesheet" />
+
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" />
+
+</head>
+<body>
+	
+	<div class="container">
+		<!-- HEADER -->
+		<div th:replace="fragments/header :: header"></div>
+			
+		<!-- WHITE BOX -->
+		<div class="white-box" style="margin-top: 100px;">
+			<div class="container">
+				<div class="row" align="center"><h2>Detalhes da Reserva</h2></div><br/>
+				<div class="row">
+					<div class="col-sm-8"></div>
+					<div class="col-sm-4">
+						<a class="btn btn-danger btn-sm" th:href="@{${'/reserva/deletar/'+reserva.id}}" title="Deletar">
+							Deletar
+						</a>
+					</div>
+				</div>
+				<div class="row" align="center">
+					<img id="reserva_img" class="img-circle"
+						src="/images/logoReserva.png" height="150" width="150"/>
+				</div> <br/>
+				<div class="row" align="center">
+					<h1 th:text="${reserva.diaSemana} + ' / ' + ${reserva.horario}"></h1>
+					<h3 th:text="${reserva.turma.disciplina.nome} + ' - ' + ${reserva.turma.professor}"></h3>
+				</div>
+				<br/><br/>
+			</div>
+		</div><!-- End to White Box -->
+		
+		<!-- FOOTER -->
+		<div th:include="fragments/footer :: footer"></div>
+		
+	</div>
+		
+	<script th:src="@{/bootstrap/js/jquery.js}"></script>
+	<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+</body>
+</html>
