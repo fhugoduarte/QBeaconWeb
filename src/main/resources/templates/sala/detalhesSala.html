@@ -81,16 +81,16 @@
 						    	<th scope="col"><h4>Lista de Reservas</h4></th>
 						    	<th></th>
 						    	<th>
-						    		<a th:href="@{${'/sala/'+sala.id+'/criar_reserva'}}"
+						    		<!-- <a th:href="@{${'/sala/'+sala.id+'/criar_reserva'}}"
 						    			class="btn btn-success btn-sm">
 						    			Criar nova Reserva
-						    		</a>
+						    		</a> -->
 						    	</th>
 						    </tr>
 						  </thead>
 						  <tbody>
 						    <tr th:each="reserva : ${sala.reservas}">
-						      <td><a th:text=" ${reserva.diaSemana} + ' / ' + ${reserva.horario} + ' - ' + ${reserva.turma.professor} + ' - ' + ${reserva.turma.disciplina.nome}" 
+						      <td><a th:text=" ${reserva.horario.diaSemana} + ' / ' + ${reserva.horario.periodo} + ' - ' + ${reserva.turma.professor} + ' - ' + ${reserva.turma.disciplina.nome}" 
 						      	th:href="@{${'/reserva/'+reserva.id}}" title="Detalhes"></a></td>
 						      <td></td>
 						      <td></td>

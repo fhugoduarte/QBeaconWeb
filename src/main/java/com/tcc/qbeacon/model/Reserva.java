@@ -1,5 +1,6 @@
 package com.tcc.qbeacon.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,9 +15,8 @@ public class Reserva {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-	private String horario;
-	
-	private String diaSemana;
+	@ManyToOne(cascade=CascadeType.ALL)
+	private Horario horario;
 	
 	@ManyToOne
 	private Sala sala;
@@ -36,14 +36,6 @@ public class Reserva {
 		this.id = id;
 	}
 
-	public String getHorario() {
-		return horario;
-	}
-
-	public void setHorario(String horario) {
-		this.horario = horario;
-	}
-
 	public Sala getSala() {
 		return sala;
 	}
@@ -60,12 +52,12 @@ public class Reserva {
 		this.turma = turma;
 	}
 
-	public String getDiaSemana() {
-		return diaSemana;
+	public Horario getHorario() {
+		return horario;
 	}
 
-	public void setDiaSemana(String diaSemana) {
-		this.diaSemana = diaSemana;
+	public void setHorario(Horario horario) {
+		this.horario = horario;
 	}
-		
+
 }

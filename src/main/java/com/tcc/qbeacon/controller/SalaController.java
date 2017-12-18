@@ -169,7 +169,7 @@ public class SalaController {
 		return "redirect:/sala/"+ sala.getId();
 	}
 	
-	@GetMapping("/{id_sala}/criar_reserva")
+	/*@GetMapping("/{id_sala}/criar_reserva")
 	public ModelAndView criarReserva(@PathVariable("id_sala") Integer id_sala) {
 		Sala sala = salaService.buscarSala(id_sala);
 		List<Turma> turmas = turmaService.pegarTurmas();
@@ -208,7 +208,7 @@ public class SalaController {
 		
 		return "redirect:/sala/"+sala.getId();
 		
-	}
+	}*/
 	
 	@GetMapping("/{id_sala}/criar_beacon")
 	public ModelAndView criarBeacon(@PathVariable("id_sala") Integer id_sala) {

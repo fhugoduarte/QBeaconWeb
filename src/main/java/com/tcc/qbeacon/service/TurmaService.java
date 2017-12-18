@@ -30,4 +30,8 @@ public class TurmaService {
 		turmaRepo.delete(turma);
 	}
 	
+	public List<Turma> pegarTurmasReservaveis () {
+		return turmaRepo.turmasReservaveis();
+	}
+	
 }

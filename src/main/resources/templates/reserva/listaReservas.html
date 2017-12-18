@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<title>Reservas</title>
+
+<!-- CorBase = #4B0082 -->
+
+<meta name="_csrf" content="${_csrf.token}" />
+<!-- default header name is X-CSRF-TOKEN -->
+<meta name="_csrf_header" content="${_csrf.headerName}" />
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<link rel="icon" type="image/png" sizes="20x20"
+	th:href="@{/images/logoQBeacon.png}" />
+<link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet" />
+<link th:href="@{/css/footer.css}" rel="stylesheet" />
+<link href="navbar-fixed-top.css" rel="stylesheet" />
+
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" />
+
+</head>
+<body>
+	
+	<div class="container">
+		<!-- HEADER -->
+		<div th:replace="fragments/header :: header"></div>
+		
+		<!-- WHITE BOX -->
+		<div class="white-box" style="margin-top: 100px;">
+			<div class="container">
+				<h1> Lista  de Reservas</h1>
+				<div class="col-sm-3"></div>
+				<a th:href="@{${'/reserva/verificar_disponibilidade/'}}"
+					class="btn btn-success btn-sm">
+					<strong>Nova</strong>
+				</a><br/><br/><br/><br/>
+				<div class="card card-container  row">
+					<table class="table table-striped">
+					  <thead class="thead-dark">
+					    <tr>
+					      <th scope="col" class=" col-sm-1"></th>
+					      <th scope="col"  class=" col-sm-4">Horário</th>
+					      <th scope="col"  class=" col-sm-2">Sala</th>
+					      <th scope="col"  class=" col-sm-3">Turma</th>
+					      <th scope="col" class=" col-sm-2">Ações</th>
+					    </tr>
+					  </thead>
+					  <tbody>
+					    <tr th:each="reserva : ${reservas}">
+					      <td scope="row"><i class="fa fa-unlock-alt "></i></td>
+					      <td><a th:text="${reserva.horario.diaSemana + ' / ' + reserva.horario.periodo}" th:href="@{${'/reserva/'+reserva.id}}" title="Detalhes"></a></td>
+					      <td><a th:text="${reserva.sala.nome}" th:href="@{${'/sala/'+reserva.sala.id}}" title="Detalhes"></a></td>
+					      <td><a th:text="${reserva.turma.professor + ' - ' + reserva.turma.disciplina.nome}" th:href="@{${'/turma/'+reserva.turma.id}}" title="Detalhes"></a></td>
+					      <td>
+					      	<a class="btn btn-primary btn-sm" th:href="@{${'/reserva/'+reserva.id}}" title="Detalhes">
+					      		<i class="fa fa-search-plus"></i>
+					      	</a>
+					      	<a class="btn btn-warning btn-sm" th:href="@{${'/reserva/editar/'+reserva.id}}" title="Editar">
+					      		<i class="fa fa-pencil-square-o"></i>
+					      	</a>
+					      	<a class="btn btn-danger btn-sm" th:href="@{${'/reserva/deletar/'+reserva.id}}" title="Deletar">
+					      		<i class="fa fa-trash-o"></i>
+					      	</a>
+					      </td>
+					    </tr>
+					  </tbody>
+					</table>
+				</div>
+			</div>
+		</div><!-- End to White Box -->
+		
+		<!-- FOOTER -->
+		<div th:include="fragments/footer :: footer"></div>
+		
+	</div>
+		
+	<script th:src="@{/bootstrap/js/jquery.js}"></script>
+	<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+</body>
+</html>

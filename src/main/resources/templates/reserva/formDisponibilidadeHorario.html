@@ -3,7 +3,7 @@
 	xmlns:th="http://www.thymeleaf.org">
 
 <head>
-<title>Cadastro Reserva</title>
+<title>Verificar Disponibilidade</title>
 
 <!-- CorBase = #4B0082 -->
 
@@ -34,50 +34,32 @@
 			<div class="container">
 				<div class="row col-sm-4"></div>
 				<div class="card card-container  row col-sm-4">
-					<h1>Nova Reserva</h1><br/>
+					<h1>Disponibilidade de Horário</h1><br/>
 					<div class="form-group" align="center">
 					<img id="reserva_img" class="img-circle"
 						src="/images/logoReserva.png" height="150" width="150"/><br/><br/>
-					<p id="reserva_name"></p>
-					<form id="cadastro_reserva" method="POST" th:object="${reserva}" >
+					<p id="horario_name"></p>
+					<form id="cadastro_horario" method="POST" th:object="${horario}">
 						<input type="hidden"
           					th:name="${_csrf.parameterName}"
           					th:value="${_csrf.token}" />
+          				<input type="hidden"
+          					th:name="${horario.reservas}"
+          					th:value="${horario.reservas}" />
+          					
           				<div class="form-group">
-          					<label>Sala</label> <br/><br/>
+          					<label>Dia da Semana</label> <br/><br/>
           					<div class="input-group">
           						<span class="input-group-addon">
-          							<i class="glyphicon glyphicon-blackboard"></i>
+          							<i class="fa fa-calendar"></i>
           						</span>
-          						<select th:if="${reserva.sala != null}" class="form-control" th:field="*{sala}" 
-          								required="true" autofocus="true" disabled="disabled">
-  									<option th:value="${reserva.sala.id}"
-  										 th:text="${reserva.sala.nome} + ' - ' + ${reserva.sala.bloco.nome} + ' - '
-  										  + ${reserva.sala.bloco.campus.nome} + ' - ' + ${reserva.sala.bloco.campus.instituicao.nome}"></option>
-								</select>
-          						<select th:unless="${reserva.sala != null}" class="form-control" th:field="*{sala}" 
+          						<select class="form-control" th:field="*{diaSemana}" 
           								autofocus="true" required="true">
-  									<option th:each="sala : ${salas}" th:value="${sala.id}"
-  										 th:text="${sala.nome} + ' - ' + ${sala.bloco.nome} + ' - '
-  										  + ${sala.bloco.campus.nome} + ' - ' + ${sala.bloco.campus.instituicao.nome}"></option>
-								</select>
-          					</div>
-          				</div> <br/>
-          				<div class="form-group">
-          					<label>Turma</label> <br/><br/>
-          					<div class="input-group">
-          						<span class="input-group-addon">
-          							<i class="fa fa-graduation-cap"></i>
-          						</span>
-          						<select th:if="${reserva.turma != null}" class="form-control" th:field="*{turma}" 
-          								required="true" autofocus="true" disabled="disabled">
-  									<option th:value="${reserva.turma.id}"
-  										 th:text="${reserva.turma.professor} + ' - ' + ${reserva.turma.disciplina.nome}"></option>
-								</select>
-          						<select th:unless="${reserva.turma != null}" class="form-control" th:field="*{turma}" 
-          								autofocus="true" required="true">
-  									<option th:each="turma : ${turmas}" th:value="${turma.id}"
-  										 th:text="${turma.professor} + ' - ' + ${turma.disciplina.nome}"></option>
+  									<option value="Segunda-Feira"> Segunda-Feira </option>
+  									<option value="Terça-Feira"> Terça-Feira </option>
+  									<option value="Quarta-Feira"> Quarta-Feira </option>
+  									<option value="Quinta-Feira"> Quinta-Feira </option>
+  									<option value="Sexta-Feira"> Sexta-Feira </option>
 								</select>
           					</div>
           				</div> <br/>
@@ -87,16 +69,20 @@
           						<span class="input-group-addon">
           							<i class="fa fa-clock-o"></i>
           						</span>
-          						<select class="form-control" th:field="*{horario}" 
-          								required="true" autofocus="true" disabled="disabled">
-  									<option th:value="${reserva.horario.id}"
-  										 th:text="${reserva.horario.diaSemana} + ' - ' + ${reserva.horario.periodo}"></option>
+          						<select class="form-control" th:field="*{periodo}" 
+          								autofocus="true" required="true">
+  									<option value="08:00 às 10:00"> 08:00 às 10:00 </option>
+  									<option value="10:00 às 12:00"> 10:00 às 12:00 </option>
+  									<option value="13:30 às 15:30"> 13:30 às 15:30 </option>
+  									<option value="15:30 às 17:30"> 15:30 às 17:30 </option>
+  									<option value="18:00 às 20:00"> 18:00 às 20:00 </option>
+  									<option value="20:00 às 22:00"> 20:00 às 22:00 </option>
 								</select>
           					</div>
           				</div> <br/>
           				<div class="form-group row">
 							<div class="col-sm-3"></div>
-							<button class="btn btn-primary col-sm-6" type="submit">Reservar</button>
+							<button class="btn btn-primary col-sm-6" type="submit">Verificar</button>
 						</div>
 					</form>
 				</div>

@@ -46,7 +46,7 @@
 						src="/images/logoReserva.png" height="150" width="150"/>
 				</div> <br/>
 				<div class="row" align="center">
-					<h1 th:text="${reserva.diaSemana} + ' / ' + ${reserva.horario}"></h1>
+					<h1 th:text="${reserva.horario.diaSemana} + ' / ' + ${reserva.horario.periodo}"></h1>
 					<h3 th:text="${reserva.turma.disciplina.nome} + ' - ' + ${reserva.turma.professor}"></h3>
 				</div>
 				<br/><br/>

@@ -10,17 +10,20 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 @Entity
-public class Disciplina {
-
+public class Horario {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	private String nome;
+	
+	private String periodo;
+	
+	private String diaSemana;
 	
 	@OneToMany(cascade=CascadeType.ALL)
-	private List<Turma> turmas;
+	private List<Reserva> reservas;
 	
-	public Disciplina() {
+	public Horario() {
 		
 	}
 
@@ -32,20 +35,28 @@ public class Disciplina {
 		this.id = id;
 	}
 
-	public String getNome() {
-		return nome;
+	public String getPeriodo() {
+		return periodo;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setPeriodo(String periodo) {
+		this.periodo = periodo;
 	}
 
-	public List<Turma> getTurmas() {
-		return turmas;
+	public String getDiaSemana() {
+		return diaSemana;
 	}
 
-	public void setTurmas(List<Turma> turmas) {
-		this.turmas = turmas;
+	public void setDiaSemana(String diaSemana) {
+		this.diaSemana = diaSemana;
+	}
+
+	public List<Reserva> getReservas() {
+		return reservas;
+	}
+
+	public void setReservas(List<Reserva> reservas) {
+		this.reservas = reservas;
 	}
 		
 }

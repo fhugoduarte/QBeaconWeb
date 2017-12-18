@@ -19,5 +19,4 @@ public interface CampusRepository extends JpaRepository<Campus, Integer> {
 			nativeQuery=true)
 	List<Campus> campusValidos();
 	
-	
 }

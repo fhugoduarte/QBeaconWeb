@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tcc.qbeacon.model.Horario;
 import com.tcc.qbeacon.model.Sala;
 import com.tcc.qbeacon.repository.SalaRepository;
 
@@ -32,6 +33,10 @@ public class SalaService {
 	
 	public List<Sala> pegarSalasValidas() {
 		return salaRepo.salasValidas();
+	}
+	
+	public List<Sala> pegarSalasVagas(Horario horario) {
+		return salaRepo.salasVagas(horario.getDiaSemana(), horario.getPeriodo());
 	}
 	
 }
