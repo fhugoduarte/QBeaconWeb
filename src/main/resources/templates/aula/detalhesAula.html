@@ -3,7 +3,7 @@
 	xmlns:th="http://www.thymeleaf.org">
 
 <head>
-<title th:text="${turma.disciplina.nome}"></title>
+<title th:text="${aula.assunto}"></title>
 
 <!-- CorBase = #4B0082 -->
 
@@ -32,25 +32,26 @@
 		<!-- WHITE BOX -->
 		<div class="white-box" style="margin-top: 100px;">
 			<div class="container">
-				<div class="row" align="center"><h2>Detalhes da Turma</h2></div><br/>
+				<div class="row" align="center"><h2>Detalhes da Aula</h2></div><br/>
 				<div class="row">
 					<div class="col-sm-8"></div>
 					<div class="col-sm-4">
-						<a class="btn btn-warning btn-sm" th:href="@{${'/turma/editar/'+turma.id}}" title="Editar">
+						<a class="btn btn-warning btn-sm" th:href="@{${'/aula/editar/'+aula.id}}" title="Editar">
 							Editar
 						</a>
-						<a class="btn btn-danger btn-sm" th:href="@{${'/turma/deletar/'+turma.id}}" title="Deletar">
+						<a class="btn btn-danger btn-sm" th:href="@{${'/aula/deletar/'+aula.id}}" title="Deletar">
 							Deletar
 						</a>
 					</div>
 				</div>
 				<div class="row" align="center">
-					<img id="turma_img" class="img-circle"
-						src="/images/logoTurma.png" height="150" width="150"/>
+					<img id="bloco_img" class="img-circle"
+						src="/images/blocoLogo.png" height="150" width="150"/>
 				</div>
 				<div class="row" align="center">
-					<h3 th:text="'- ' + ${turma.disciplina.nome} + ' -'"></h3> <br/>
-					<h1 th:text="${turma.professor}"></h1>
+					<h2 th:text="'- ' + ${aula.turma.professor} + ' / ' + ${aula.turma.disciplina.nome} + ' -'"></h2>
+					<h3 th:text="${aula.dia}"></h3> <br/> <br/>
+					<h1 th:text="${aula.assunto}"></h1>
 				</div>
 				<br/><br/><br/>
 				<div class="row">
@@ -59,20 +60,13 @@
 						<table class="table table-striped">
 						  <thead class="thead-dark">
 						    <tr>
-						    	<th scope="col"><h4>Lista de Aulas</h4></th>
+						    	<th scope="col"><h4>Frequência</h4></th>
 						    	<th></th>
-						    	<th>
-						    		<a th:href="@{${'/turma/'+turma.id+'/criar_aula'}}"
-						    			class="btn btn-success btn-sm">
-						    			Criar nova Aula
-						    		</a>
-						    	</th>
 						    </tr>
 						  </thead>
 						  <tbody>
-						    <tr th:each="aula : ${turma.aulas}">
-						      <td><a th:text="${aula.dia} + ' - ' + ${aula.assunto}"  th:href="@{${'/aula/'+aula.id}}" title="Detalhes"></a></td>
-						      <td></td>
+						    <tr th:each="aluno : ${aula.turma.alunos}">
+						      <td><a th:text="${aluno.nome}" href="#" title="Detalhes"></a></td>
 						      <td></td>
 						    </tr>
 						  </tbody>

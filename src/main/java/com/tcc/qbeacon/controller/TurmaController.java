@@ -13,9 +13,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.tcc.qbeacon.model.Aula;
 import com.tcc.qbeacon.model.Disciplina;
+import com.tcc.qbeacon.model.Reserva;
 import com.tcc.qbeacon.model.Turma;
+import com.tcc.qbeacon.service.AulaService;
 import com.tcc.qbeacon.service.DisciplinaService;
+import com.tcc.qbeacon.service.ReservaService;
 import com.tcc.qbeacon.service.TurmaService;
 
 @Controller
@@ -27,6 +31,12 @@ public class TurmaController {
 	
 	@Autowired
 	DisciplinaService disciplinaService;
+	
+	@Autowired
+	AulaService aulaService;
+	
+	@Autowired
+	ReservaService reservaService;
 	
 	@GetMapping(path="/listar_turmas")
 	public ModelAndView listaTurmas() {
@@ -111,6 +121,42 @@ public class TurmaController {
 		model.addObject("turma", turma);
 		
 		return model;
+	}
+	
+	@GetMapping("/{id_turma}/criar_aula")
+	public ModelAndView criarAula(@PathVariable("id_turma") Integer id_turma) {
+		
+		Turma turma = turmaService.buscarTurma(id_turma);
+		Aula aula = new Aula();
+		aula.setTurma(turma);
+		
+		ModelAndView model = new ModelAndView("aula/formCadastrarAula");
+		model.addObject("aula", aula);
+		return model;
+	
+	}
+	
+	@PostMapping("/{id_turma}/criar_aula")
+	public String salvarAula(@PathVariable("id_turma") Integer id_turma,
+							@Valid Aula aula, BindingResult result) {
+		
+		Turma turma = turmaService.buscarTurma(id_turma);
+		aula.setTurma(turma);
+		aula.setFrequencia(null);
+		Aula aulaSalva = aulaService.salvarAula(aula);
+		
+		List<Aula> aulas = turma.getAulas();
+		aulas.add(aulaSalva);
+		turma.setAulas(aulas);
+		turmaService.salvarTurma(turma);
+		
+		Reserva reserva = reservaService.buscarReserva(aulaSalva.getReserva().getId());
+		aulas = reserva.getAulas();
+		aulas.add(aulaSalva);
+		reserva.setAulas(aulas);
+		reservaService.salvarReserva(reserva);
+		
+		return "redirect:/turma/"+turma.getId();
 	}
 	
 	public Disciplina adicionarTurmaDisciplina(Disciplina disciplina, Turma turma) {

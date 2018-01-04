@@ -103,7 +103,7 @@ public class ReservaController {
 		horario = this.adicionarReservaHorario(horario, reservaSalva);
 		horarioService.salvarHorario(horario);		
 	
-		return "redirect:/reserva/verificar_disponibilidade";
+		return "redirect:/reserva/" + reservaSalva.getId();
 	}
 	
 	@GetMapping("/deletar/{id}")

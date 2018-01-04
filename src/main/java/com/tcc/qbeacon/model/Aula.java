@@ -1,6 +1,5 @@
 package com.tcc.qbeacon.model;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -10,7 +9,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
-import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 public class Aula {
@@ -19,15 +17,16 @@ public class Aula {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String assunto;
-	
-	@DateTimeFormat(pattern = "dd/MM/yyyy")
-	private Date dia;
+	private String dia;
 	
 	@ManyToMany
 	private List<Usuario> frequencia;
 	
 	@ManyToOne
 	private Turma turma;
+	
+	@ManyToOne
+	private Reserva reserva;
 	
 	public Aula() {
 		
@@ -49,11 +48,11 @@ public class Aula {
 		this.assunto = assunto;
 	}
 
-	public Date getDia() {
+	public String getDia() {
 		return dia;
 	}
 
-	public void setDia(Date dia) {
+	public void setDia(String dia) {
 		this.dia = dia;
 	}
 
@@ -71,6 +70,14 @@ public class Aula {
 
 	public void setTurma(Turma turma) {
 		this.turma = turma;
+	}
+
+	public Reserva getReserva() {
+		return reserva;
+	}
+
+	public void setReserva(Reserva reserva) {
+		this.reserva = reserva;
 	}
 	
 }
