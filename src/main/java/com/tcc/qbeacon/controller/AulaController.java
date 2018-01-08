@@ -68,9 +68,13 @@ public class AulaController {
 	@GetMapping("/editar/{id}")
 	public ModelAndView editarAula(@PathVariable("id") Integer id) {
 		Aula aula = aulaService.buscarAula(id);
+		Reserva reserva1 = aula.getTurma().getReserva1();
+		Reserva reserva2 = aula.getTurma().getReserva2();
 		
 		ModelAndView model = new ModelAndView("aula/formEditarAula");
 		model.addObject("aula", aula);
+		model.addObject("reserva1", reserva1);
+		model.addObject("reserva2", reserva2);
 		return model;
 	}
 	

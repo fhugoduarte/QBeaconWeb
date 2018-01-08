@@ -46,7 +46,7 @@
 				</div>
 				<div class="row" align="center">
 					<img id="bloco_img" class="img-circle"
-						src="/images/blocoLogo.png" height="150" width="150"/>
+						src="/images/logoAula.png" height="150" width="150"/>
 				</div>
 				<div class="row" align="center">
 					<h2 th:text="'- ' + ${aula.turma.professor} + ' / ' + ${aula.turma.disciplina.nome} + ' -'"></h2>
@@ -60,13 +60,20 @@
 						<table class="table table-striped">
 						  <thead class="thead-dark">
 						    <tr>
-						    	<th scope="col"><h4>Frequência</h4></th>
+						    	<th scope="col"><h4>Alunos Presentes</h4></th>
 						    	<th></th>
+						    	<th>
+						    		<a th:href="@{${'/aula/editar_frequencia/'+aula.id}}"
+						    			class="btn btn-success btn-sm">
+						    			Editar Frequência
+						    		</a>
+						    	</th>
 						    </tr>
 						  </thead>
 						  <tbody>
 						    <tr th:each="aluno : ${aula.turma.alunos}">
 						      <td><a th:text="${aluno.nome}" href="#" title="Detalhes"></a></td>
+						      <td></td>
 						      <td></td>
 						    </tr>
 						  </tbody>

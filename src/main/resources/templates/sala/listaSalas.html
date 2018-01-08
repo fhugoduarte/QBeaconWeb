@@ -53,7 +53,7 @@
 					  </thead>
 					  <tbody>
 					    <tr th:each="sala : ${salas}">
-					      <td scope="row"><i class="fa fa-building"></i></td>
+					      <td scope="row"><i class="glyphicon glyphicon-blackboard"></i></td>
 					      <td><a th:text="${sala.nome}" th:href="@{${'/sala/'+sala.id}}" title="Detalhes"></a></td>
 					      <td><a th:text="${sala.bloco.nome}" th:href="@{${'/bloco/'+sala.bloco.id}}" title="Detalhes"></a></td>
 					      <td><a th:text="${sala.bloco.campus.nome}" th:href="@{${'/campus/'+sala.bloco.campus.id}}" title="Detalhes"></a></td>

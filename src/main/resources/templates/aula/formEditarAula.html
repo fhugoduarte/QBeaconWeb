@@ -3,7 +3,7 @@
 	xmlns:th="http://www.thymeleaf.org">
 
 <head>
-<title>Cadastro Aula</title>
+<title>Editar Aula</title>
 
 <!-- CorBase = #4B0082 -->
 
@@ -34,30 +34,39 @@
 			<div class="container">
 				<div class="row col-sm-4"></div>
 				<div class="card card-container  row col-sm-4">
-					<h1>Nova Aula</h1><br/>
+					<h2 th:text="${aula.dia} + ' - ' + ${aula.assunto}"></h2><br/>
 					<div class="form-group" align="center">
 					<img id="aula_img" class="img-circle"
 						src="/images/logoAula.png" height="150" width="150"/><br/><br/>
 					<p id="aula_name"></p>
-					<form id="cadastro_aula" method="POST" th:object="${aula}">
+					<form id="editar_aula" method="POST" th:object="${aula}" th:action="@{/aula/editar}">
 						<input type="hidden"
           					th:name="${_csrf.parameterName}"
           					th:value="${_csrf.token}" />
+          				<input	type="hidden"
+          					th:field="*{id}"
+          					th:value="${aula.id}" />
+          				<input	type="hidden"
+          					th:field="*{frequencia}"
+          					th:value="${aula.frequencia}" />
+          				<input	type="hidden"
+          					th:field="*{turma}"
+          					th:value="${aula.turma}" />
+          					
           				<div class="form-group">
-          					<label for="inputDate">Dia da aula</label> <br/><br/>
+          					<label for="inputDate">Dia da Aula</label> <br/><br/>
           					<div class="input-group">
           						<span class="input-group-addon">
           							<i class="fa fa-calendar"></i>
           						</span>
-          						<!-- <input type="date" id="inputDate" class="form-control"
-								placeholder="Dia da Aula" th:field="*{dia}" required="true"
-								autofocus="true" /> -->
-								<input type="text" class="form-control" id="dia" autofocus="true"
-									th:field="*{dia}" placeholder="dd/mm/yyyy" required="true"/>
+								<input type="text" class="form-control" id="dia"
+									th:field="*{dia}" placeholder="dd/mm/yyyy" required="true"
+									autofocus="true"/>
           					</div>
           				</div> <br/>
+          				
           				<div class="form-group">
-          					<label for="inputAssunto">Assunto da Aula</label> <br/><br/>
+          					<label>Assunto</label> <br/><br/>
           					<div class="input-group">
           						<span class="input-group-addon">
           							<i class="fa fa-comments"></i>
@@ -75,18 +84,18 @@
           						</span>
           						<select class="form-control" th:field="*{reserva}" 
           								required="true" autofocus="true">
-  									<option th:if="${aula.turma.reserva1 != null}" th:value="${aula.turma.reserva1.id}"
-  										 th:text="${aula.turma.reserva1.sala.nome} + ' - ' + ${aula.turma.reserva1.horario.periodo} + ' / '
-  										  + ${aula.turma.reserva1.horario.diaSemana}"></option>
-  									<option th:if="${aula.turma.reserva2 != null}" th:value="${aula.turma.reserva2.id}"
-  										 th:text="${aula.turma.reserva2.sala.nome} + ' - ' + ${aula.turma.reserva2.horario.periodo} + ' / '
-  										  + ${aula.turma.reserva2.horario.diaSemana}"></option>
+  									<option th:if="${reserva1 != null}" th:value="${reserva1.id}"
+  										 th:text="${reserva1.sala.nome} + ' - ' + ${reserva1.horario.periodo} + ' / '
+  										  + ${reserva1.horario.diaSemana}"></option>
+  									<option th:if="${reserva2 != null}" th:value="${reserva2.id}"
+  										 th:text="${reserva2.sala.nome} + ' - ' + ${reserva2.horario.periodo} + ' / '
+  										  + ${reserva2.horario.diaSemana}"></option>
 								</select>
           					</div>
           				</div> <br/>
           				<div class="form-group row">
 							<div class="col-sm-3"></div>
-							<button class="btn btn-primary col-sm-6" type="submit">Cadastrar</button>
+							<button class="btn btn-success col-sm-6" type="submit">Editar</button>
 						</div>
 					</form>
 				</div>
