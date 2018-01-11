@@ -22,7 +22,7 @@ public class Sala {
 	@ManyToOne
 	private Bloco bloco;
 	
-	@OneToOne(cascade=CascadeType.ALL)
+	@OneToOne
 	private Beacon beacon;
 	
 	@OneToMany(cascade=CascadeType.ALL)

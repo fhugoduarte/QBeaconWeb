@@ -2,6 +2,7 @@ package com.tcc.qbeacon.model;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,10 +20,10 @@ public class Turma {
 	private Integer id;
 	private String professor;
 	
-	@OneToOne
+	@OneToOne(cascade=CascadeType.ALL)
 	private Reserva reserva1;
 	
-	@OneToOne
+	@OneToOne(cascade=CascadeType.ALL)
 	private Reserva reserva2;
 	
 	@ManyToMany
@@ -31,7 +32,7 @@ public class Turma {
 	@ManyToOne
 	private Disciplina disciplina;
 	
-	@OneToMany
+	@OneToMany(cascade=CascadeType.ALL)
 	private List<Aula> aulas;
 	
 	public Turma() {

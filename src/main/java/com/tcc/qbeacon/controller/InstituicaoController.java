@@ -27,7 +27,7 @@ public class InstituicaoController {
 	
 	@Autowired
 	CampusService campusService;
-	
+		
 	@GetMapping(path="/listar_instituicoes")
 	public ModelAndView listaInstituicoes() {
 		ModelAndView model = new ModelAndView("instituicao/listaInstituicoes");
@@ -109,5 +109,5 @@ public class InstituicaoController {
 		return "redirect:/instituicao/"+instituicao.getId();
 		
 	}
-	
+		
 }

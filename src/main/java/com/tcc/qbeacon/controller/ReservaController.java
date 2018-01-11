@@ -13,10 +13,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.tcc.qbeacon.model.Aula;
 import com.tcc.qbeacon.model.Horario;
 import com.tcc.qbeacon.model.Reserva;
 import com.tcc.qbeacon.model.Sala;
 import com.tcc.qbeacon.model.Turma;
+import com.tcc.qbeacon.service.AulaService;
 import com.tcc.qbeacon.service.HorarioService;
 import com.tcc.qbeacon.service.ReservaService;
 import com.tcc.qbeacon.service.SalaService;
@@ -37,6 +39,9 @@ public class ReservaController {
 	
 	@Autowired
 	HorarioService horarioService;
+	
+	@Autowired
+	AulaService aulaService;
 	
 	@GetMapping(path="/listar_reservas")
 	public ModelAndView listaReservas() {
@@ -122,6 +127,8 @@ public class ReservaController {
 		sala = this.removerReservaSala(sala, reserva);
 		salaService.salvarSala(sala);
 		
+		this.removerReservaAulas(reserva);
+		
 		reservaService.deletarReserva(reserva);
 		return "redirect:/sala/" + sala.getId();
 	}
@@ -183,6 +190,16 @@ public class ReservaController {
 		horario.setReservas(reservas);
 		
 		return horario;
+	}
+	
+	public void removerReservaAulas(Reserva reserva) {
+		if(! reserva.getAulas().isEmpty())
+			for (Aula aula : reserva.getAulas()) {
+				aula.setReserva(null);
+				aulaService.salvarAula(aula);
+				if(reserva.getAulas().isEmpty())
+					break;
+			}
 	}
 
 }

@@ -15,9 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.tcc.qbeacon.model.Beacon;
 import com.tcc.qbeacon.model.Bloco;
-import com.tcc.qbeacon.model.Reserva;
 import com.tcc.qbeacon.model.Sala;
-import com.tcc.qbeacon.model.Turma;
 import com.tcc.qbeacon.service.BeaconService;
 import com.tcc.qbeacon.service.BlocoService;
 import com.tcc.qbeacon.service.ReservaService;
