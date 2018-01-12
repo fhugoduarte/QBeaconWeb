@@ -70,16 +70,6 @@ Sistema web para realizar o cadastro e reserva de salas de aula, bem como gerenc
 	    on sala for each row
 	    execute procedure excluir_sala();
    ````
-   ---
-   
-#### Tecnologias Utilizadas no Desenvolvimento:
-   
-<p align="center">
-  <img src="https://springla.io/wp-content/uploads/2015/01/spring-tool-suite-project-logo.png" width="100"/>
-  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Postgresql_elephant.svg/1200px-Postgresql_elephant.svg.png" width="100"/>
-  <img src="https://camo.githubusercontent.com/5d417873a11d7175ec40fc3af3c6cb024a531dd7/68747470733a2f2f676574626f6f7473747261702e636f6d2f6173736574732f6272616e642f626f6f7473747261702d736f6c69642e737667" width="100"/>
-</p>
-
 ---
 
 #### ScreenShots:
@@ -98,3 +88,13 @@ Sistema web para realizar o cadastro e reserva de salas de aula, bem como gerenc
    <i>Nesta tela é possível cadastrar uma nova Disciplina.</i>
 
 <img align="center" src="https://uploaddeimagens.com.br/images/001/247/418/original/disciplina.png?1515766734" width="700"/>
+
+   ---
+   
+#### Tecnologias Utilizadas no Desenvolvimento:
+   
+<p align="center">
+  <img src="https://springla.io/wp-content/uploads/2015/01/spring-tool-suite-project-logo.png" width="100"/>
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Postgresql_elephant.svg/1200px-Postgresql_elephant.svg.png" width="100"/>
+  <img src="https://camo.githubusercontent.com/5d417873a11d7175ec40fc3af3c6cb024a531dd7/68747470733a2f2f676574626f6f7473747261702e636f6d2f6173736574732f6272616e642f626f6f7473747261702d736f6c69642e737667" width="100"/>
+</p>
