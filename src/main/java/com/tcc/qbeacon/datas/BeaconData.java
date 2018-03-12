@@ -1,21 +1,20 @@
 package com.tcc.qbeacon.datas;
 
-import java.util.List;
-
-public class InstituicaoData {
+public class BeaconData {
 	
 	private Integer id;
 	private String nome;
-	private List<CampusData> campus;
+	private Integer sala;
 	
-	public InstituicaoData() {
+	public BeaconData() {
 		
 	}
 	
-	public InstituicaoData(Integer id, String nome) {
+	public BeaconData(Integer id, String nome, Integer sala) {
 		super();
 		this.id = id;
 		this.nome = nome;
+		this.sala = sala;
 	}
 
 	public Integer getId() {
@@ -34,12 +33,12 @@ public class InstituicaoData {
 		this.nome = nome;
 	}
 
-	public List<CampusData> getCampus() {
-		return campus;
+	public Integer getSala() {
+		return sala;
 	}
 
-	public void setCampus(List<CampusData> campus) {
-		this.campus = campus;
+	public void setSala(Integer sala) {
+		this.sala = sala;
 	}
 	
 }
