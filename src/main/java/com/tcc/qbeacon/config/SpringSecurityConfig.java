@@ -28,8 +28,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         .authorizeRequests()
         	.antMatchers("/css/**", "/js/**", "/images/**", "/plugins/**", "/bootstrap/**", "/less/**").permitAll()
             .antMatchers("/usuario/cadastrar").permitAll()
+            .antMatchers("/api/**").permitAll()
             .anyRequest().authenticated()
-
             .and()
         .exceptionHandling()
             .accessDeniedPage("/negado")
