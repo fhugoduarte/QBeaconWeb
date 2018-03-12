@@ -2,6 +2,7 @@ package com.tcc.qbeacon.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -28,7 +29,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         .authorizeRequests()
         	.antMatchers("/css/**", "/js/**", "/images/**", "/plugins/**", "/bootstrap/**", "/less/**").permitAll()
             .antMatchers("/usuario/cadastrar").permitAll()
-            .antMatchers("/api/**").permitAll()
+            .antMatchers(HttpMethod.GET, "/api/**").permitAll()
+            .antMatchers(HttpMethod.POST, "/api/**").permitAll()
+            .antMatchers(HttpMethod.POST).permitAll()
             .anyRequest().authenticated()
             .and()
         .exceptionHandling()
