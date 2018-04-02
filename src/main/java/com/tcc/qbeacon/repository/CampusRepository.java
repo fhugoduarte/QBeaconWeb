@@ -13,6 +13,8 @@ import com.tcc.qbeacon.model.Campus;
 @Repository
 @Transactional
 public interface CampusRepository extends JpaRepository<Campus, Integer> {
+	
+	//Retorna todos os campus que não tem relacionamento com uma instituição.
 	@Query(value = "SELECT * FROM CAMPUS c "
 			+ "WHERE c.id NOT IN "
 			+ "(SELECT campus_id FROM INSTITUICAO_CAMPUS)",

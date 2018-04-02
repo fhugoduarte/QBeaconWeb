@@ -14,6 +14,7 @@ import com.tcc.qbeacon.model.Turma;
 @Transactional
 public interface TurmaRepository extends JpaRepository<Turma, Integer>{
 	
+	//Retorna todas as turmas que não possuem as duas reservas cadastradas.
 	@Query(value = "SELECT * FROM TURMA t "
 			+ "WHERE t.reserva1_id IS NULL OR t.reserva2_id IS NULL",
 			nativeQuery=true)

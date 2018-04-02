@@ -31,10 +31,12 @@ public class SalaService {
 		salaRepo.delete(sala);
 	}
 	
+	//Pega todas as salas que não possuem beacon.
 	public List<Sala> pegarSalasValidas() {
 		return salaRepo.salasValidas();
 	}
 	
+	//Pega todas as salas que tem horário vago no dia da semana e no periodo passado como parametro.
 	public List<Sala> pegarSalasVagas(Horario horario) {
 		return salaRepo.salasVagas(horario.getDiaSemana(), horario.getPeriodo());
 	}

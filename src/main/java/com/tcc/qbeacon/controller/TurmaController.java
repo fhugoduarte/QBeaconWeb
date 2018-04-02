@@ -60,6 +60,7 @@ public class TurmaController {
 		Turma turmaSalva = turmaService.salvarTurma(turma);
 		Disciplina disciplina = turmaSalva.getDisciplina();
 		
+		//Adiciona a turma a lista de turmas da disciplina e salva a disciplina.
 		disciplina = this.adicionarTurmaDisciplina(disciplina, turmaSalva);
 		disciplinaService.salvarDisciplina(disciplina);
 		
@@ -70,6 +71,7 @@ public class TurmaController {
 	public String deletarTurma(@PathVariable("id") Integer id) {
 		Turma turma = turmaService.buscarTurma(id);
 		
+		//Remove a turma da lista de turmas da disciplina e salva a disciplina.
 		Disciplina disciplina = turma.getDisciplina();
 		disciplina = this.removerTurmaDisciplina(disciplina, turma);
 		disciplinaService.salvarDisciplina(disciplina);
@@ -93,21 +95,25 @@ public class TurmaController {
 	public String editarTurma(@Valid Turma turma, BindingResult result) {	
 		Turma turmaAntiga = turmaService.buscarTurma(turma.getId());
 		
+		//Se a disciplina não tiver sido alterada, ele salva a turma.
 		if(turma.getDisciplina().equals(turmaAntiga.getDisciplina())){
 			turmaService.salvarTurma(turma);
 			return "redirect:/turma/listar_turmas";
 		}
 		
+		//Caso contrário, ele altera a disciplina.
 		Disciplina disciplinaAntiga = turmaAntiga.getDisciplina();
 		
+		//Remove a turma da lista de turmas da disciplina antiga e salva a disciplina antiga.
 		disciplinaAntiga = this.removerTurmaDisciplina(disciplinaAntiga, turmaAntiga);
 		disciplinaService.salvarDisciplina(disciplinaAntiga);
 		
+		//Adiciona a turma na lista de turmas da disciplina nova e salva a disciplina nova.
 		Disciplina disciplinaNova = turma.getDisciplina();
 		disciplinaNova = this.adicionarTurmaDisciplina(disciplinaNova, turma);
-		
 		disciplinaNova = disciplinaService.salvarDisciplina(disciplinaNova);
 		
+		//Adiciona a disciplina nova na turma e salva a turma.
 		turma.setDisciplina(disciplinaNova);
 		turmaService.salvarTurma(turma);
 		
@@ -123,6 +129,7 @@ public class TurmaController {
 		return model;
 	}
 	
+	//Cria uma nova aula já setando a turma da aula.
 	@GetMapping("/{id_turma}/criar_aula")
 	public ModelAndView criarAula(@PathVariable("id_turma") Integer id_turma) {
 		
@@ -140,16 +147,19 @@ public class TurmaController {
 	public String salvarAula(@PathVariable("id_turma") Integer id_turma,
 							@Valid Aula aula, BindingResult result) {
 		
+		//Adiciona a turma na aula, coloca a frequencia como nula e salva a aula.
 		Turma turma = turmaService.buscarTurma(id_turma);
 		aula.setTurma(turma);
 		aula.setFrequencia(null);
 		Aula aulaSalva = aulaService.salvarAula(aula);
 		
+		//Adiciona aula a lista de aulas da turma e salva a turma.
 		List<Aula> aulas = turma.getAulas();
 		aulas.add(aulaSalva);
 		turma.setAulas(aulas);
 		turmaService.salvarTurma(turma);
 		
+		//Adiciona a aula a lista de aulas da reserva e salva a reserva.
 		Reserva reserva = reservaService.buscarReserva(aulaSalva.getReserva().getId());
 		aulas = reserva.getAulas();
 		aulas.add(aulaSalva);
@@ -159,6 +169,7 @@ public class TurmaController {
 		return "redirect:/turma/"+turma.getId();
 	}
 	
+	//Adiciona a turma a lista de turmas da disciplina.
 	public Disciplina adicionarTurmaDisciplina(Disciplina disciplina, Turma turma) {
 		List<Turma> turmas = disciplina.getTurmas();
 		turmas.add(turma);
@@ -167,6 +178,7 @@ public class TurmaController {
 		return disciplina;
 	}
 	
+	//Remove a turma da lista de turmas da disciplina.
 	public Disciplina removerTurmaDisciplina(Disciplina disciplina, Turma turma) {
 		List<Turma> turmas = disciplina.getTurmas();
 		turmas.remove(turma);

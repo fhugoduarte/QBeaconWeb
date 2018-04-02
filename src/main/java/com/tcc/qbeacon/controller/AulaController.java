@@ -51,16 +51,20 @@ public class AulaController {
 	public String deletarAula(@PathVariable("id") Integer id) {
 		Aula aula = aulaService.buscarAula(id);
 		
+		//Remove a aula que vai ser deletada da lista de aulas da turma.
 		Turma turma = aula.getTurma();
 		turma = this.removerAulaTurma(turma, aula);
 		turmaService.salvarTurma(turma);
 		
+		//Remove a aula da lista de aulas da reserva, assim esse horário fica livre para ser reservado.
 		Reserva reserva = aula.getReserva();
 		reserva = this.removerAulaReserva(reserva, aula);
 		reservaService.salvarReserva(reserva);
 		
+		//Remove a aula da lista de aulas de cada aluno que estava na aula.
 		this.removerAulaAlunos(aula.getFrequencia(), aula);
 		
+		//Exclui a aula do DB.
 		aulaService.deletarAula(aula);
 		return "redirect:/turma/" + turma.getId();
 	}
@@ -104,6 +108,8 @@ public class AulaController {
 		List<Usuario> alunosAntigos = aula.getFrequencia();
 		List<Usuario> alunosAdicionados = aulaEditada.getFrequencia();
 		
+		//Adiciona a lista de alunos antigos os novos alunos selecionados, 
+		//porém se o aluno já estava na lista antes, ele não é adicionado
 		for (Usuario aluno : alunosAntigos) {
 			if(!alunosAdicionados.contains(aluno)) {
 				aluno = this.removerAulaAluno(aluno, aula);
@@ -111,17 +117,23 @@ public class AulaController {
 			}	
 		}
 		
+		//Adiciona a aula a lista de aulas dos alunos adicionados recentemente,
+		//porém se o aluno já estava na lista antes, ele não é adicionado
 		for (Usuario aluno : alunosAdicionados) {
-			aluno = this.adicionarAulaAluno(aluno, aula);
-			usuarioService.salvarUsuario(aluno);
+			if(!alunosAdicionados.contains(aluno)) {
+				aluno = this.adicionarAulaAluno(aluno, aula);
+				usuarioService.salvarUsuario(aluno);
+			}
 		}
 		
+		//Atualiza a lista de alunos da aula e salva a aula no DB.
 		aula.setFrequencia(alunosAdicionados);
 		aulaService.salvarAula(aula);
 		
 		return "redirect:/aula/" + aula.getId();
 	}
 	
+	//Remove a aula da lista de aulas da turma.
 	public Turma removerAulaTurma(Turma turma, Aula aula) {
 		List<Aula> aulas = turma.getAulas();
 		aulas.remove(aula);
@@ -130,6 +142,7 @@ public class AulaController {
 		return turma;
 	}
 	
+	//Remove a aula da lista de aulas da reserva.
 	public Reserva removerAulaReserva(Reserva reserva, Aula aula) {
 		List<Aula> aulas = reserva.getAulas();
 		aulas.remove(aula);
@@ -138,6 +151,7 @@ public class AulaController {
 		return reserva;
 	}
 	
+	//Remove a aula da lista de aulas de cada aluno passado na lista "alunos".
 	public void removerAulaAlunos(List<Usuario> alunos, Aula aula) {
 		
 		for (Usuario aluno : alunos) {
@@ -148,6 +162,7 @@ public class AulaController {
 		}
 	}
 	
+	//Remove a aula da lista de aulas de um aluno especifico.
 	public Usuario removerAulaAluno(Usuario aluno, Aula aula) {
 		List<Aula> aulas = aluno.getAulas();
 		aulas.remove(aula);
@@ -156,6 +171,7 @@ public class AulaController {
 		return aluno;
 	}
 	
+	//Adiciona a aula a lista de aulas de um aluno especifico.
 	public Usuario adicionarAulaAluno(Usuario aluno, Aula aula) {
 		List<Aula> aulas = aluno.getAulas();
 		aulas.add(aula);

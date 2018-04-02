@@ -30,6 +30,7 @@ public class CampusService {
 		campusRepo.delete(campus);
 	}
 	
+	//Pega todos os campus que não possuem instituição.
 	public List<Campus> pegarCampusValidos () {
 		return campusRepo.campusValidos();
 	}

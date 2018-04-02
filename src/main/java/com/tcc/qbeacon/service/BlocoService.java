@@ -30,6 +30,7 @@ public class BlocoService {
 		blocoRepo.delete(bloco);
 	}
 	
+	//Pega todos os blocos que não possuem campus.
 	public List<Bloco> pegarBlocosValidos () {
 		return blocoRepo.blocosValidos();
 	}

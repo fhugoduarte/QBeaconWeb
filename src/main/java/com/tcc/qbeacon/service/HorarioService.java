@@ -30,6 +30,7 @@ public class HorarioService {
 		horarioRepo.delete(horario);
 	}
 	
+	//Pega um horário igual ao horário passado como parametro.
 	public Horario buscarHorario(Horario horario) {
 		return horarioRepo.igual(horario.getDiaSemana(), horario.getPeriodo());
 	}

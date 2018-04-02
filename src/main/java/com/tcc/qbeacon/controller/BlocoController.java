@@ -62,6 +62,7 @@ public class BlocoController {
 		Bloco blocoSalvo = blocoService.salvarBloco(bloco);
 		Campus campus = blocoSalvo.getCampus();
 		
+		//Adiciona o bloco cadastrado a lista de blocos do campus e salva o campus.
 		campus = this.adicionarBlocoCampus(campus, blocoSalvo);
 		campusService.salvarCampus(campus);
 
@@ -72,6 +73,7 @@ public class BlocoController {
 	public String deletarBloco(@PathVariable("id") Integer id) {
 		Bloco bloco = blocoService.buscarBloco(id);
 		
+		//Remove o bloco da lista de blocos do campus e salva o campus.
 		Campus campus = bloco.getCampus();
 		campus = this.removerBlocoCampus(campus, bloco);
 		campusService.salvarCampus(campus);
@@ -98,6 +100,7 @@ public class BlocoController {
 		
 		Bloco blocoSalvo = blocoService.salvarBloco(bloco);
 		
+		//Verifica se o campus foi alterado, caso sim, ele chama a função que altera o campus do bloco.
 		if(!bloco.getCampus().equals(campusVelho))
 			this.alterarCampus(campusVelho, blocoSalvo.getCampus(), blocoSalvo);
 		
@@ -113,6 +116,7 @@ public class BlocoController {
 		return model;
 	}
 	
+	//Função que cria uma nova sala para um determinado bloco.
 	@GetMapping("/{id_bloco}/criar_sala")
 	public ModelAndView criarSala(@PathVariable("id_bloco") Integer id_bloco) {
 		List<Beacon> beacons = beaconService.pegarBeaconsValidos();
@@ -121,6 +125,7 @@ public class BlocoController {
 		Sala sala = new Sala();
 		sala.setBloco(bloco);
 		
+		//Redireciona para o cadastro da sala, já setando o bloco indicado.
 		ModelAndView model = new ModelAndView("sala/formCadastrarSala");
 		model.addObject("sala", sala);
 		model.addObject("beacons", beacons);
@@ -136,10 +141,12 @@ public class BlocoController {
 		sala.setBloco(bloco);
 		Sala salaSalva = salaService.salvarSala(sala);
 		
+		//Adiciona a sala a lista de salas do bloco.
 		List<Sala> salas = bloco.getSalas();
 		salas.add(salaSalva);
 		bloco.setSalas(salas);
 		
+		//Se a sala cadastrada tiver beacon, adiciona a sala ao beacon.
 		if(salaSalva.getBeacon() != null){
 			Beacon beacon = salaSalva.getBeacon();
 			beacon.setSala(salaSalva);
@@ -152,6 +159,7 @@ public class BlocoController {
 		
 	}
 	
+	//Adiciona o bloco a lista de blocos do campus.
 	public Campus adicionarBlocoCampus(Campus campus, Bloco bloco) {
 		List<Bloco> blocos = campus.getBlocos();
 		blocos.add(bloco);
@@ -160,6 +168,7 @@ public class BlocoController {
 		return campus;
 	}
 	
+	//Remove o bloco da lista de blocos do campus.
 	public Campus removerBlocoCampus(Campus campus, Bloco bloco) {
 		List<Bloco> blocos = campus.getBlocos();
 		blocos.remove(bloco);
@@ -170,11 +179,13 @@ public class BlocoController {
 	
 	public void alterarCampus (Campus antigo, Campus novo, Bloco bloco) {
 		
+		//Remove o bloco da lista de blocos do campus antigo.
 		List<Bloco> blocos = antigo.getBlocos();
 		blocos.remove(bloco);
 		antigo.setBlocos(blocos);
 		campusService.salvarCampus(antigo);
 		
+		//Adiciona o bloco a lista de blocos do novo campus.
 		blocos = novo.getBlocos();
 		blocos.add(bloco);
 		novo.setBlocos(blocos);
