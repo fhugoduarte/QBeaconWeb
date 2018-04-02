@@ -3,7 +3,7 @@
 	xmlns:th="http://www.thymeleaf.org">
 
 <head>
-<title>Detalhes da Aula</title>
+<title>Editar Frequência</title>
 
 <!-- CorBase = #4B0082 -->
 
@@ -32,54 +32,41 @@
 		<!-- WHITE BOX -->
 		<div class="white-box" style="margin-top: 100px;">
 			<div class="container">
-				<div class="row" align="center"><h2>Detalhes da Aula</h2></div><br/>
+				<div class="row" align="center"><h2>Editar Frequência</h2></div><br/>
 				<div class="row">
 					<div class="col-sm-8"></div>
 					<div class="col-sm-4">
-						<a class="btn btn-warning btn-sm" th:href="@{${'/aula/editar/'+aula.id}}" title="Editar">
-							Editar
-						</a>
-						<a class="btn btn-danger btn-sm" th:href="@{${'/aula/deletar/'+aula.id}}" title="Deletar">
-							Deletar
-						</a>
 					</div>
 				</div>
 				<div class="row" align="center">
-					<img id="bloco_img" class="img-circle"
-						src="/images/logoAula.png" height="150" width="150"/>
-				</div>
-				<div class="row" align="center">
-					<h2 th:text="'- ' + ${aula.turma.professor} + ' / ' + ${aula.turma.disciplina.nome} + ' -'"></h2>
-					<h3 th:text="${aula.dia}"></h3>
-					<h3 th:text="${aula.reserva.sala.nome} + ' - ' + ${aula.reserva.horario.periodo} + ' / '
-  										  + ${aula.reserva.horario.diaSemana}"></h3> <br/> <br/>
-					<h3 th:text="${aula.assunto}"></h3>
+					<h4 th:text="'- ' + ${aula.turma.professor} + ' / ' + ${aula.turma.disciplina.nome} + ' -'"></h4>
+					<h4 th:text="${aula.dia}"></h4>
+					<h4 th:text="${aula.reserva.sala.nome} + ' - ' + ${aula.reserva.horario.periodo} + ' / '
+  										  + ${aula.reserva.horario.diaSemana}"></h4><br/>
+					<h4 th:text="${aula.assunto}"></h4>
 				</div>
 				<br/><br/><br/>
 				<div class="row">
 					<div class="col-sm-3"></div>
 					<div class="card card-container row col-sm-6">
-						<table class="table table-striped">
-						  <thead class="thead-dark">
-						    <tr>
-						    	<th scope="col"><h4>Alunos Presentes</h4></th>
-						    	<th></th>
-						    	<th>
-						    		<a th:href="@{${'/aula/editar_frequencia/'+aula.id}}"
-						    			class="btn btn-success btn-sm">
-						    			Editar Frequência
-						    		</a>
-						    	</th>
-						    </tr>
-						  </thead>
-						  <tbody>
-						    <tr th:each="aluno : ${aula.frequencia}">
-						      <td><span th:text="${aluno.nome}"></span></td>
-						      <td></td>
-						      <td></td>
-						    </tr>
-						  </tbody>
-						</table>
+						<h4>Alunos</h4><br/>
+						<form id="editar_frequencia" method="POST" th:object="${aula}">
+						<input type="hidden"
+          					th:name="${_csrf.parameterName}"
+          					th:value="${_csrf.token}" />
+          				<div class="form-group" th:each="aluno : ${todosAlunos}">
+          					<div class="form-check">
+          						
+          					    <input th:if="${alunosPresentes.contains(aluno)}" class="form-check-input" type="checkbox" th:value="${aluno.id}" id="checkbox" th:field="*{frequencia}" checked="true" />
+          					    <input th:unless="${alunosPresentes.contains(aluno)}" class="form-check-input" type="checkbox" th:value="${aluno.id}" id="checkbox" th:field="*{frequencia}" />
+							    <label class="form-check-label" for="checkbox" th:text="${aluno.nome}"></label>
+          					</div>
+          				</div> <br/>
+          				<div class="form-group row">
+							<div class="col-sm-3"></div>
+							<button class="btn btn-success col-sm-6" type="submit">Editar</button>
+						</div>
+					</form>
 					</div>
 					<div class="col-sm-3"></div>
 				</div>

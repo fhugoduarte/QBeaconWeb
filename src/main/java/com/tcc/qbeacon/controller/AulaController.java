@@ -88,32 +88,35 @@ public class AulaController {
 	@GetMapping("/editar_frequencia/{id}")
 	public ModelAndView editarFrequenciaAula(@PathVariable("id") Integer id) {
 		Aula aula = aulaService.buscarAula(id);
-		List<Usuario> alunos = aula.getFrequencia();
+		List<Usuario> alunosPresentes = aula.getFrequencia();
+		List<Usuario> todosAlunos = aula.getTurma().getAlunos();
 		
 		ModelAndView model = new ModelAndView("aula/formEditarFrequencia");
 		model.addObject("aula", aula);
-		model.addObject("alunos", alunos);
+		model.addObject("alunosPresentes", alunosPresentes);
+		model.addObject("todosAlunos", todosAlunos);
 		return model;
 	}
 	
 	@PostMapping("/editar_frequencia/{id}")
-	public String editarFrequenciaAula(@PathVariable("id") Integer id, @Valid List<Usuario> alunos, BindingResult result) {
+	public String editarFrequenciaAula(@PathVariable("id") Integer id, @Valid Aula aulaEditada, BindingResult result) {
 		Aula aula = aulaService.buscarAula(id);
 		List<Usuario> alunosAntigos = aula.getFrequencia();
+		List<Usuario> alunosAdicionados = aulaEditada.getFrequencia();
 		
 		for (Usuario aluno : alunosAntigos) {
-			if(!alunos.contains(aluno)) {
+			if(!alunosAdicionados.contains(aluno)) {
 				aluno = this.removerAulaAluno(aluno, aula);
 				usuarioService.salvarUsuario(aluno);
 			}	
 		}
 		
-		for (Usuario aluno : alunos) {
+		for (Usuario aluno : alunosAdicionados) {
 			aluno = this.adicionarAulaAluno(aluno, aula);
 			usuarioService.salvarUsuario(aluno);
 		}
 		
-		aula.setFrequencia(alunos);
+		aula.setFrequencia(alunosAdicionados);
 		aulaService.salvarAula(aula);
 		
 		return "redirect:/aula/" + aula.getId();
