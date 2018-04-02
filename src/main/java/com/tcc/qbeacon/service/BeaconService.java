@@ -30,6 +30,7 @@ public class BeaconService {
 		beaconRepo.delete(beacon);
 	}
 	
+	//Pega todos os beacons que não possuem sala.
 	public List<Beacon> pegarBeaconsValidos () {
 		return beaconRepo.beaconsValidos();
 	}

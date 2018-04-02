@@ -67,9 +67,11 @@ public class SalaController {
 		Sala salaSalva = salaService.salvarSala(sala);
 		Bloco bloco = salaSalva.getBloco();
 		
+		//Adiciona a sala a lista de salas do bloco e salva o bloco.
 		bloco = this.adicionarSalaBloco(bloco, salaSalva);
 		blocoService.salvarBloco(bloco);
 		
+		//Se a sala tiver um beacon, adiciona a sala ao beacon e salva o beacon.
 		if(salaSalva.getBeacon() != null){
 			Beacon beacon = salaSalva.getBeacon();
 			beacon.setSala(salaSalva);
@@ -83,10 +85,12 @@ public class SalaController {
 	public String deletarSala(@PathVariable("id") Integer id) {
 		Sala sala = salaService.buscarSala(id);
 		
+		//Remove a sala da lista de salas do bloco e salva o bloco.
 		Bloco bloco = sala.getBloco();
 		bloco = this.removerSalaBloco(bloco, sala);
 		blocoService.salvarBloco(bloco);
 		
+		//Se a sala tiver beacon, tira a sala do beacon e salva.
 		if(sala.getBeacon() != null){
 			Beacon beacon = sala.getBeacon();
 			beacon.setSala(null);
@@ -118,9 +122,11 @@ public class SalaController {
 		
 		Sala salaSalva = salaService.salvarSala(sala);
 		
+		//Verifica se o bloco foi alterado, caso sim, chama a função que altera o bloco.
 		if(!salaSalva.getBloco().equals(blocoVelho))
 			this.alterarBloco(blocoVelho, salaSalva.getBloco(), salaSalva);
 
+		//Verifica se o beacon foi alterado, caso sim, chama a função que altera o beacon.
 		if(salaSalva.getBeacon() != beaconVelho)
 			this.alterarBeacon(beaconVelho, salaSalva.getBeacon(), salaSalva);
 		
@@ -139,6 +145,7 @@ public class SalaController {
 		return model;
 	}
 	
+	//Adiciona um beacon a uma sala.
 	@GetMapping("/{id_sala}/adicionar_beacon/{id_beacon}")
 	public String adicionarBeacon(@PathVariable("id_sala") Integer id_sala, @PathVariable("id_beacon") Integer id_beacon) {
 		Sala sala = salaService.buscarSala(id_sala);
@@ -153,6 +160,7 @@ public class SalaController {
 		return "redirect:/sala/"+ sala.getId();
 	}
 	
+	//Remove um beacon de uma sala.
 	@GetMapping("/{id_sala}/remover_beacon/{id_beacon}")
 	public String removerBeacon(@PathVariable("id_sala") Integer id_sala, @PathVariable("id_beacon") Integer id_beacon) {
 		Sala sala = salaService.buscarSala(id_sala);
@@ -167,47 +175,7 @@ public class SalaController {
 		return "redirect:/sala/"+ sala.getId();
 	}
 	
-	/*@GetMapping("/{id_sala}/criar_reserva")
-	public ModelAndView criarReserva(@PathVariable("id_sala") Integer id_sala) {
-		Sala sala = salaService.buscarSala(id_sala);
-		List<Turma> turmas = turmaService.pegarTurmas();
-		
-		Reserva reserva = new Reserva();
-		reserva.setSala(sala);
-		
-		ModelAndView model = new ModelAndView("reserva/formCadastrarReserva");
-		model.addObject("reserva", reserva);
-		model.addObject("turmas", turmas);
-		return model;
-	}
-	
-	@PostMapping("/{id_sala}/criar_reserva")
-	public String salvarReserva(@PathVariable("id_sala") Integer id_sala,
-							@Valid Reserva reserva, BindingResult result) {
-		if (result.hasErrors()) return "redirect:/sala/"+id_sala+"/criar_reserva";
-		
-		Sala sala = salaService.buscarSala(id_sala);
-		reserva.setSala(sala);
-		Reserva reservaSalva = reservaService.salvarReserva(reserva);
-		
-		List<Reserva> reservas = sala.getReservas();
-		reservas.add(reservaSalva);
-		sala.setReservas(reservas);
-		salaService.salvarSala(sala);
-		
-		Turma turma = reserva.getTurma();
-		if(turma.getReserva1() == null) {
-			turma.setReserva1(reservaSalva);
-			turmaService.salvarTurma(turma);
-		}else if(turma.getReserva2() == null) {
-			turma.setReserva2(reservaSalva);
-			turmaService.salvarTurma(turma);
-		}
-		
-		return "redirect:/sala/"+sala.getId();
-		
-	}*/
-	
+	//Cria um beacon já com uma sala informada.
 	@GetMapping("/{id_sala}/criar_beacon")
 	public ModelAndView criarBeacon(@PathVariable("id_sala") Integer id_sala) {
 		Sala sala = salaService.buscarSala(id_sala);
@@ -220,6 +188,7 @@ public class SalaController {
 		return model;
 	}
 	
+	//Adiciona a sala a lista de salas do bloco.
 	public Bloco adicionarSalaBloco(Bloco bloco, Sala sala) {
 		List<Sala> salas = bloco.getSalas();
 		salas.add(sala);
@@ -228,6 +197,7 @@ public class SalaController {
 		return bloco;
 	}
 	
+	//Remove a sala da lista de salas do bloco.
 	public Bloco removerSalaBloco(Bloco bloco, Sala sala) {
 		List<Sala> salas = bloco.getSalas();
 		salas.remove(sala);
@@ -238,11 +208,13 @@ public class SalaController {
 	
 	public void alterarBloco (Bloco antigo, Bloco novo, Sala sala) {
 		
+		//Remove a sala da lista de salas do bloco antigo e salva o bloco.
 		List<Sala> salas = antigo.getSalas();
 		salas.remove(sala);
 		antigo.setSalas(salas);
 		blocoService.salvarBloco(antigo);
 		
+		//Adiciona a sala a lista de salas do bloco novo. e salva o bloco
 		salas = novo.getSalas();
 		salas.add(sala);
 		novo.setSalas(salas);
@@ -252,11 +224,13 @@ public class SalaController {
 	
 	public void alterarBeacon (Beacon antigo, Beacon novo, Sala sala) {
 		
+		//Se o beacon antigo não for nulo, ele seta a sala do beacon como nula e salva o beacon.
 		if(antigo != null) {
 			antigo.setSala(null);
 			beaconService.salvarBeacon(antigo);
 		}
 		
+		//Se o novo beacon não for nulo, ele seta a sala do beacon como a sala passada por parametro e salva o beacon.
 		if(novo != null) {
 			novo.setSala(sala);
 			beaconService.salvarBeacon(novo);

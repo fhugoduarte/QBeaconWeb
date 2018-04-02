@@ -52,6 +52,7 @@ public class BeaconController {
 		
 		Beacon beaconSalvo = beaconService.salvarBeacon(beacon);
 		
+		//Se o beacon cadastrado tiver uma sala ele adiciona o beacon a sala e atualiza a sala.
 		if(beaconSalvo.getSala() != null){
 			Sala sala = beaconSalvo.getSala();
 			sala.setBeacon(beaconSalvo);
@@ -66,6 +67,7 @@ public class BeaconController {
 	public String deletarBeacon(@PathVariable("id") Integer id) {
 		Beacon beacon = beaconService.buscarBeacon(id);
 		
+		//Se o beacon que vai ser apagado tem uma sala, ele tira o beacon da sala e atualiza a sala.
 		if(beacon.getSala() != null){
 			Sala sala = beacon.getSala();
 			sala.setBeacon(null);
@@ -95,6 +97,7 @@ public class BeaconController {
 		
 		Beacon beaconSalvo = beaconService.salvarBeacon(beacon);
 		
+		//Verifica se a sala do beacon foi alterada, caso sim, chama a função que altera a sala.
 		if(salaVelha != beaconSalvo.getSala())			
 			this.alterarSala(salaVelha, beaconSalvo.getSala(), beaconSalvo);
 		
@@ -113,6 +116,7 @@ public class BeaconController {
 		return model;
 	}
 	
+	//Função adiciona uma determinada sala ao beacon.
 	@GetMapping("/{id_beacon}/adicionar_sala/{id_sala}")
 	public String adicionarSala(@PathVariable("id_beacon") Integer id_beacon, @PathVariable("id_sala") Integer id_sala) {
 		Sala sala = salaService.buscarSala(id_sala);
@@ -127,6 +131,7 @@ public class BeaconController {
 		return "redirect:/beacon/"+ beacon.getId();
 	}
 	
+	//Função remove uma sala do beacon.
 	@GetMapping("/{id_beacon}/remover_sala/{id_sala}")
 	public String removerSala(@PathVariable("id_beacon") Integer id_beacon, @PathVariable("id_sala") Integer id_sala) {
 		Sala sala = salaService.buscarSala(id_sala);
@@ -141,6 +146,7 @@ public class BeaconController {
 		return "redirect:/beacon/"+ beacon.getId();
 	}
 	
+	//Remove o beacon da sala antiga e adiciona na nova sala e atualiza as duas.
 	public void alterarSala (Sala antiga, Sala nova, Beacon beacon) {
 		
 		if(antiga != null) {

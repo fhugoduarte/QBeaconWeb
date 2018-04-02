@@ -14,6 +14,7 @@ import com.tcc.qbeacon.model.Beacon;
 @Transactional
 public interface BeaconRepository extends JpaRepository<Beacon, Integer> {
 	
+	//Retorna a lista de beacons que não tem sala.
 	@Query(value = "SELECT * FROM BEACON b "
 			+ "WHERE b.sala_id IS NULL ", nativeQuery=true)
 	List<Beacon> beaconsValidos();

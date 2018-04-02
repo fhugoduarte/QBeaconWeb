@@ -62,10 +62,12 @@ public class ReservaController {
 	public String verificaDisponibilidade(@Valid Horario horario, BindingResult result) {
 		if (result.hasErrors()) return "redirect:/reserva/verificar_disponibilidade";
 		
+		//Verifica se já existe o horário informado, caso exista ele adiciona esse horário a reserva e redireciona para o cadastro da mesma.
 		if(horarioService.buscarHorario(horario) != null) {
 			Horario horarioBanco = horarioService.buscarHorario(horario);
 			return "redirect:/reserva/" + horarioBanco.getId() + "/cadastrar";
 		}
+		//Caso não exista ele cria um novo horário, salva esse horário e redireciona para o cadastro da reserva.
 		horarioService.salvarHorario(horario);	
 		
 		return "redirect:/reserva/" + horario.getId() + "/cadastrar";
@@ -80,6 +82,7 @@ public class ReservaController {
 		Reserva reserva = new Reserva();
 		reserva.setHorario(horario);
 		
+		//Refireciona para a página de cadastrar uma reserva já com o horário setado.
 		ModelAndView model = new ModelAndView("reserva/formCadastrarReserva");
 		model.addObject("salas", salas);
 		model.addObject("turmas", turmas);
@@ -96,15 +99,17 @@ public class ReservaController {
 		
 		Reserva reservaSalva = reservaService.salvarReserva(reserva);
 		
+		//Adiciona a reserva a sala informada e salva a sala.
 		Sala sala = reservaSalva.getSala();
 		sala = this.adicionarReservaSala(sala, reservaSalva);
 		salaService.salvarSala(sala);
 
+		//Adiciona a reserva a turma informada e salva a turma.
 		Turma turma = reservaSalva.getTurma();
 		turma = this.adicionarReservaTurma(turma, reservaSalva);
 		turmaService.salvarTurma(turma);
 		
-		
+		//Adiciona a reserva ao horário informado e salva o horário.
 		horario = this.adicionarReservaHorario(horario, reservaSalva);
 		horarioService.salvarHorario(horario);		
 	
@@ -115,18 +120,22 @@ public class ReservaController {
 	public String deletarReserva(@PathVariable("id") Integer id) {
 		Reserva reserva = reservaService.buscarReserva(id);
 		
+		//Remove a reserva da turma e salva a turma.
 		Turma turma = reserva.getTurma();
 		turma = this.removerReservaTurma(turma, reserva);
 		turmaService.salvarTurma(turma);
 		
+		//Remove a reserva da lista de reservas do horário e salva o horário.
 		Horario horario = reserva.getHorario();
 		horario = this.removerReservaHorario(horario, reserva);
 		horarioService.salvarHorario(horario);
 		
+		//Remove a reserva da lista de reservas da sala e salva a sala.
 		Sala sala = reserva.getSala();
 		sala = this.removerReservaSala(sala, reserva);
 		salaService.salvarSala(sala);
 		
+		//Remove as aulas da reserva.
 		this.removerReservaAulas(reserva);
 		
 		reservaService.deletarReserva(reserva);
@@ -142,6 +151,7 @@ public class ReservaController {
 		return model;
 	}
 	
+	//Adiciona a reserva a lista de reservas da sala.
 	public Sala adicionarReservaSala(Sala sala, Reserva reserva) {
 		List<Reserva> reservas = sala.getReservas();
 		reservas.add(reserva);
@@ -150,6 +160,7 @@ public class ReservaController {
 		return sala;
 	}
 	
+	//Remove a reserva da lista de reservas da sala.
 	public Sala removerReservaSala(Sala sala, Reserva reserva) {
 		List<Reserva> reservas = sala.getReservas();
 		reservas.remove(reserva);
@@ -158,6 +169,7 @@ public class ReservaController {
 		return sala;
 	}
 	
+	//Adiciona a reserva da turma.
 	public Turma adicionarReservaTurma(Turma turma, Reserva reserva) {
 		if(turma.getReserva1() == null) {
 			turma.setReserva1(reserva);
@@ -167,6 +179,7 @@ public class ReservaController {
 		return turma;
 	}
 	
+	//Remove a reserva da turma.
 	public Turma removerReservaTurma(Turma turma, Reserva reserva) {
 		if(turma.getReserva1().equals(reserva)) {
 			turma.setReserva1(null);
@@ -176,6 +189,7 @@ public class ReservaController {
 		return turma;
 	}
 	
+	//Adiciona a reserva a lista de reservas do horário.
 	public Horario adicionarReservaHorario(Horario horario, Reserva reserva) {
 		List<Reserva> reservas = horario.getReservas();
 		reservas.add(reserva);
@@ -184,6 +198,7 @@ public class ReservaController {
 		return horario;
 	}
 	
+	//Remove a reserva da lista de reservas do horário.
 	public Horario removerReservaHorario(Horario horario, Reserva reserva) {
 		List<Reserva> reservas = horario.getReservas();
 		reservas.remove(reserva);
@@ -192,6 +207,7 @@ public class ReservaController {
 		return horario;
 	}
 	
+	//Remove a reserva de todas as aulas da reserva e salva as aulas.
 	public void removerReservaAulas(Reserva reserva) {
 		if(! reserva.getAulas().isEmpty())
 			for (Aula aula : reserva.getAulas()) {

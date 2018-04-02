@@ -81,12 +81,14 @@ public class InstituicaoController {
 		return model;
 	}
 	
+	//Cria um campus com a instituição informada.
 	@GetMapping("/{id_instituicao}/criar_campus")
 	public ModelAndView criarCampus(@PathVariable("id_instituicao") Integer id_instituicao) {
 		Instituicao instituicao = instituicaoService.buscarInstituicao(id_instituicao);
 		Campus campus = new Campus();
 		campus.setInstituicao(instituicao);
 		
+		//Retorna para a página de cadastro do campus já com a instituição setada.
 		ModelAndView model = new ModelAndView("campus/formCadastrarCampus");
 		model.addObject("campus", campus);
 		return model;
@@ -97,10 +99,12 @@ public class InstituicaoController {
 							@Valid Campus campus, BindingResult result) {
 		if (result.hasErrors()) return "redirect:/institucao/"+id_instituicao+"/criar_campus";
 		
+		//Adiciona a instituição ao campus cadastrado e salva o campus.
 		Instituicao instituicao = instituicaoService.buscarInstituicao(id_instituicao);
 		campus.setInstituicao(instituicao);
 		Campus campusSalvo = campusService.salvarCampus(campus);
 		
+		//Adiciona o campus a lista de campus da instituição e salva a instituição.
 		List<Campus> campusInst = instituicao.getCampus();
 		campusInst.add(campusSalvo);
 		instituicao.setCampus(campusInst);

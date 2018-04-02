@@ -80,12 +80,14 @@ public class DisciplinaController {
 		return model;
 	}
 	
+	//Cria uma turma para a disciplina passada.
 	@GetMapping("/{id_disciplina}/criar_turma")
 	public ModelAndView criarTurma(@PathVariable("id_disciplina") Integer id_disciplina) {
 		Disciplina disciplina = disciplinaService.buscarDisciplina(id_disciplina);
 		Turma turma = new Turma();
 		turma.setDisciplina(disciplina);
 		
+		//Retorna para a página de cadastrar uma turma já com a disciplina setada.
 		ModelAndView model = new ModelAndView("turma/formCadastrarTurma");
 		model.addObject("turma", turma);
 		return model;
@@ -96,10 +98,12 @@ public class DisciplinaController {
 							@Valid Turma turma, BindingResult result) {
 		if (result.hasErrors()) return "redirect:/disciplina/"+id_disciplina+"/criar_turma";
 		
+		//Adiciona a disciplina a turma cadastrada e salva a turma.
 		Disciplina disciplina = disciplinaService.buscarDisciplina(id_disciplina);
 		turma.setDisciplina(disciplina);
 		Turma turmaSalva = turmaService.salvarTurma(turma);
 		
+		//Adiciona a turma a lista de turmas da disciplina e salva a disciplina.
 		List<Turma> turmas = disciplina.getTurmas();
 		turmas.add(turmaSalva);
 		disciplina.setTurmas(turmas);

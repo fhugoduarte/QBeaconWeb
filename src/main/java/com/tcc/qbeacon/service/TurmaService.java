@@ -30,6 +30,7 @@ public class TurmaService {
 		turmaRepo.delete(turma);
 	}
 	
+	//Pega todas as turmas que não possuem as duas reservas cadastradas.
 	public List<Turma> pegarTurmasReservaveis () {
 		return turmaRepo.turmasReservaveis();
 	}

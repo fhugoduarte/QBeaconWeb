@@ -13,11 +13,13 @@ import com.tcc.qbeacon.model.Sala;
 @Repository
 @Transactional
 public interface SalaRepository extends JpaRepository<Sala, Integer> {
+	//Retorna todas as salas que não possuem beacon.
 	@Query(value = "SELECT * FROM SALA s "
 			+ "WHERE s.beacon_id IS NULL",
 			nativeQuery=true)
 	List<Sala> salasValidas();
 	
+	//Retorna todas as salas que tem horário vago no dia da semana e no periodo passado como parametro.
 	@Query(value = "SELECT * FROM SALA s "
 			+ "WHERE s.id NOT IN ("
 			+ "		SELECT sala_id FROM SALA_RESERVAS sr WHERE sr.reservas_id NOT IN ("
@@ -29,10 +31,4 @@ public interface SalaRepository extends JpaRepository<Sala, Integer> {
 			nativeQuery=true)
 	List<Sala> salasVagas(String diaSemana, String periodo);
 	
-	/*select * from sala s where s.id not in (
-	select sala_id from sala_reservas sr where sr.reservas_id not in (
-		select reservas_id from horario_reservas hr where hr.horario_id not in (
-			select id from horario h where h.dia_semana = 'Segunda-Feira' and h.horario = '08:00 às 10:00')
-		)
-	);*/
 }

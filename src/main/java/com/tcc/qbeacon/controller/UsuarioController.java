@@ -31,6 +31,7 @@ public class UsuarioController {
 	@PostMapping(path="/cadastrar")
 	public String salvarUsuario(@Valid Usuario usuario, BindingResult result) {
 		if (result.hasErrors()) return "redirect:/cadastrar";
+		//Adiciona o papel do usuário como administrador por padrão ao se cadastrar no sistema web.
 		usuario.setPapel(Papel.ADMINISTRADOR);
 		usuarioService.salvarUsuario(usuario);
 		return "redirect:/";

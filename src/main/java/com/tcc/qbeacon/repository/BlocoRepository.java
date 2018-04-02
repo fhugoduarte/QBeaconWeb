@@ -14,6 +14,7 @@ import com.tcc.qbeacon.model.Bloco;
 @Transactional
 public interface BlocoRepository extends JpaRepository<Bloco, Integer> {
 	
+	//Retorna uma lista de todos bloco que não tem relacionamento com nenhum campus.
 	@Query(value = "SELECT * FROM BLOCO b "
 			+ "WHERE b.id NOT IN "
 			+ "(SELECT blocos_id FROM CAMPUS_BLOCOS)",
