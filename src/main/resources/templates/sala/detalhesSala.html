@@ -36,6 +36,14 @@
 				<div class="row">
 					<div class="col-sm-8"></div>
 					<div class="col-sm-4">
+						<a th:unless="${sala.energia}"
+							class="btn btn-success btn-sm" th:href="@{${'/sala/ligar/'+sala.id}}" title="Ligar Energia">
+							Ligar Energia
+						</a>
+						<a th:if="${sala.energia}"
+							class="btn btn-danger btn-sm" th:href="@{${'/sala/desligar/'+sala.id}}" title="Desligar Energia">
+							Desligar Energia
+						</a>
 						<a class="btn btn-warning btn-sm" th:href="@{${'/sala/editar/'+sala.id}}" title="Editar">
 							Editar
 						</a>

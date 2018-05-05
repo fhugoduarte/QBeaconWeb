@@ -18,6 +18,7 @@ public class Sala {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String nome;
+	private boolean energia;
 	
 	@ManyToOne
 	private Bloco bloco;
@@ -71,5 +72,13 @@ public class Sala {
 	public void setReservas(List<Reserva> reservas) {
 		this.reservas = reservas;
 	}
-				
+
+	public boolean isEnergia() {
+		return energia;
+	}
+
+	public void setEnergia(boolean energia) {
+		this.energia = energia;
+	}
+					
 }

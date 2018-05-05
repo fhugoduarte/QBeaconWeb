@@ -2,7 +2,11 @@ package com.tcc.qbeacon.util;
 
 public class Constants {
 	
-	public static final long TOKEN_EXPIRAR_MINUTOS = 24 * 60;
+	public static final long TOKEN_EXPIRAR_MINUTOS = 24000 * 60000;
+	
+	public static final String URI_MQTT = "tcp://localhost:1883";
+	public static final String TOPICO_MQTT_API = "qbeacon";
+	public static final String TOPICO_MQTT_ARDUINO = "inTopic";
 	
 	/**
 	 *  Contants de retornos da API
