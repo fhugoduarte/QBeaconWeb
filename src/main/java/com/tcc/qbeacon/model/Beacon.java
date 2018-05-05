@@ -13,6 +13,8 @@ public class Beacon {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String nome;
+	private boolean ativado;
+	private boolean presenca;
 	
 	@OneToOne
 	private Sala sala;
@@ -43,6 +45,22 @@ public class Beacon {
 
 	public void setSala(Sala sala) {
 		this.sala = sala;
+	}
+
+	public boolean isAtivado() {
+		return ativado;
+	}
+
+	public void setAtivado(boolean ativado) {
+		this.ativado = ativado;
+	}
+	
+	public boolean isPresenca() {
+		return presenca;
+	}
+
+	public void setPresenca(boolean presenca) {
+		this.presenca = presenca;
 	}
 		
 }

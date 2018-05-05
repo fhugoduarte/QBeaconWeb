@@ -36,6 +36,14 @@
 				<div class="row">
 					<div class="col-sm-8"></div>
 					<div class="col-sm-4">
+						<a th:unless="${beacon.ativado}"
+							class="btn btn-success btn-sm" th:href="@{${'/beacon/ativar/'+beacon.id}}" title="Ativar">
+							Ativar
+						</a>
+						<a th:if="${beacon.ativado}"
+							class="btn btn-danger btn-sm" th:href="@{${'/beacon/desativar/'+beacon.id}}" title="Desativar">
+							Desativar
+						</a>
 						<a class="btn btn-warning btn-sm" th:href="@{${'/beacon/editar/'+beacon.id}}" title="Editar">
 							Editar
 						</a>

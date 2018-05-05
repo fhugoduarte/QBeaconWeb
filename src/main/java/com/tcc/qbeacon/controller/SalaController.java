@@ -4,6 +4,9 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -21,6 +24,7 @@ import com.tcc.qbeacon.service.BlocoService;
 import com.tcc.qbeacon.service.ReservaService;
 import com.tcc.qbeacon.service.SalaService;
 import com.tcc.qbeacon.service.TurmaService;
+import com.tcc.qbeacon.util.Constants;
 
 @Controller
 @RequestMapping(path="/sala")
@@ -64,6 +68,7 @@ public class SalaController {
 	@PostMapping("/cadastrar")
 	public String salvarSala(@Valid Sala sala, BindingResult result ) {
 		if (result.hasErrors()) return "redirect:/sala/cadastrar";
+		sala.setEnergia(false);
 		Sala salaSalva = salaService.salvarSala(sala);
 		Bloco bloco = salaSalva.getBloco();
 		
@@ -188,6 +193,55 @@ public class SalaController {
 		return model;
 	}
 	
+	//Função liga a energia da sala, enviando "1" como mensagem para o arduino através do MQTT.
+	@GetMapping("/ligar/{id_sala}")
+	public String ligarEnergia(@PathVariable("id_sala") Integer id_sala) {
+		Sala sala = salaService.buscarSala(id_sala);
+		
+		if(!sala.isEnergia()) {
+			String mqttTopico = (sala.getBloco().getCampus().getInstituicao().getNome() + "/" 
+					+ sala.getBloco().getCampus().getNome() + "/"
+					+ sala.getBloco().getNome() + "/"
+					+ sala.getNome()).toUpperCase();
+			try {
+				this.publicar("1", mqttTopico);
+				
+				sala.setEnergia(true);
+				salaService.salvarSala(sala);
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+			
+		}
+		
+		return "redirect:/sala/"+ sala.getId();
+	}
+	
+	//Função desliga a energia da sala, enviando "0" como mensagem para o arduino através do MQTT.
+	@GetMapping("/desligar/{id_sala}")
+	public String desligarEnergia(@PathVariable("id_sala") Integer id_sala) {
+		Sala sala = salaService.buscarSala(id_sala);
+		
+		if(sala.isEnergia()) {
+			String mqttTopico = (sala.getBloco().getCampus().getInstituicao().getNome() + "/" 
+					+ sala.getBloco().getCampus().getNome() + "/"
+					+ sala.getBloco().getNome() + "/"
+					+ sala.getNome()).toUpperCase();
+			
+			try {
+				this.publicar("0", mqttTopico);
+				
+				sala.setEnergia(false);
+				salaService.salvarSala(sala);
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+			
+		}
+				
+		return "redirect:/sala/"+ sala.getId();
+	}
+	
 	//Adiciona a sala a lista de salas do bloco.
 	public Bloco adicionarSalaBloco(Bloco bloco, Sala sala) {
 		List<Sala> salas = bloco.getSalas();
@@ -236,6 +290,15 @@ public class SalaController {
 			beaconService.salvarBeacon(novo);
 		}
 		
+	}
+	
+	//Envia via MQTT uma mensagem para o arduino.
+	public void publicar(String mensagem, String topico) throws MqttException {
+		MqttClient client = new MqttClient(Constants.URI_MQTT, MqttClient.generateClientId());
+	    client.connect();
+	    MqttMessage message = new MqttMessage();
+	    message.setPayload(mensagem.getBytes());
+	    client.publish(topico, message);
 	}
 	
 }

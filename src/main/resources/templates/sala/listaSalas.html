@@ -47,7 +47,8 @@
 					      <th scope="col"  class=" col-sm-1">Bloco</th>
 					      <th scope="col"  class=" col-sm-1">Campus</th>
 					      <th scope="col"  class=" col-sm-1">Instituição</th>
-					      <th scope="col"  class=" col-sm-3">Beacon</th>
+					      <th scope="col"  class=" col-sm-1">Beacon</th>
+					      <th scope="col"  class=" col-sm-2">Energia</th>
 					      <th scope="col" class=" col-sm-2">Ações</th>
 					    </tr>
 					  </thead>
@@ -63,6 +64,10 @@
 					      		th:if="${sala.beacon != null}" title="Detalhes"></a>
 					      	<span class="fa fa-times-circle" th:unless="${sala.beacon != null}" style="color: red;"
 					      	 title="Não possui Beacon"></span>
+					      </td>
+					      <td>
+					      	<i th:unless="${sala.energia}" class="fa fa-times-circle" style="color: red"></i>
+					      	<i th:if="${sala.energia}" class="fa fa-check-circle" style="color: green"></i>
 					      </td>
 					      <td>
 					      	<a class="btn btn-primary btn-sm" th:href="@{${'/sala/'+sala.id}}" title="Detalhes">

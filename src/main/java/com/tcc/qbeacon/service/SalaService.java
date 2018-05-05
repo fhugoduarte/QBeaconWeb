@@ -41,4 +41,19 @@ public class SalaService {
 		return salaRepo.salasVagas(horario.getDiaSemana(), horario.getPeriodo());
 	}
 	
+	//Pega todas as salas que tem horário vago no dia da semana e no periodo passado como parametro.
+	public List<Sala> pegarSalasVagas(String periodo, String diaSemana) {
+		return salaRepo.salasVagas(diaSemana, periodo);
+	}
+	
+	//Retorna todas as salas que estão agendadas nesse horário.
+	public List<Sala> salasComAula(String hora, String diaSemana) {
+		return salaRepo.salasComAula(hora, diaSemana);
+	}
+	
+	//Retorna todas as salas que estão agendadas nesse dia da semana.
+	public List<Sala> salasComAula(String diaSemana){
+		return salaRepo.salasComAula(diaSemana);
+	}
+	
 }

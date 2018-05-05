@@ -4,6 +4,9 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -17,6 +20,7 @@ import com.tcc.qbeacon.model.Beacon;
 import com.tcc.qbeacon.model.Sala;
 import com.tcc.qbeacon.service.BeaconService;
 import com.tcc.qbeacon.service.SalaService;
+import com.tcc.qbeacon.util.Constants;
 
 @Controller
 @RequestMapping(path="/beacon")
@@ -49,7 +53,8 @@ public class BeaconController {
 	@PostMapping("/cadastrar")
 	public String salvarBeacon(@Valid Beacon beacon, BindingResult result ) {
 		if (result.hasErrors()) return "redirect:/beacon/cadastrar";
-		
+		beacon.setAtivado(false);
+		beacon.setPresenca(false);
 		Beacon beaconSalvo = beaconService.salvarBeacon(beacon);
 		
 		//Se o beacon cadastrado tiver uma sala ele adiciona o beacon a sala e atualiza a sala.
@@ -64,7 +69,7 @@ public class BeaconController {
 	}
 	
 	@GetMapping("/deletar/{id}")
-	public String deletarBeacon(@PathVariable("id") Integer id) {
+	public String deletarBeacon(@PathVariable("id") Integer id) throws MqttException {
 		Beacon beacon = beaconService.buscarBeacon(id);
 		
 		//Se o beacon que vai ser apagado tem uma sala, ele tira o beacon da sala e atualiza a sala.
@@ -73,6 +78,8 @@ public class BeaconController {
 			sala.setBeacon(null);
 			salaService.salvarSala(sala);
 		}
+		
+		this.publicar("00000000", beacon.getNome().toUpperCase());
 		
 		beaconService.deletarBeacon(beacon);
 		return "redirect:/beacon/listar_beacons";
@@ -131,20 +138,59 @@ public class BeaconController {
 		return "redirect:/beacon/"+ beacon.getId();
 	}
 	
-	//Função remove uma sala do beacon.
-	@GetMapping("/{id_beacon}/remover_sala/{id_sala}")
-	public String removerSala(@PathVariable("id_beacon") Integer id_beacon, @PathVariable("id_sala") Integer id_sala) {
-		Sala sala = salaService.buscarSala(id_sala);
+	//Função ativa o beacon, enviando o ID do beacon para o arduino através do MQTT.
+	@GetMapping("/ativar/{id_beacon}")
+	public String ativarBeacon(@PathVariable("id_beacon") Integer id_beacon) {
 		Beacon beacon = beaconService.buscarBeacon(id_beacon);
+		String mensagem = beacon.getSala().getId().toString();
+
+		String zeros = "00000000";
+
+		mensagem = zeros.substring(0, 8 - mensagem.length()) + mensagem;
 		
-		sala.setBeacon(null);
-		salaService.salvarSala(sala);
-		
-		beacon.setSala(null);
-		beaconService.salvarBeacon(beacon);
+		try {			
+			this.publicar(mensagem, beacon.getNome().toUpperCase());
+			
+			beacon.setAtivado(true);
+			beaconService.salvarBeacon(beacon);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 			
 		return "redirect:/beacon/"+ beacon.getId();
 	}
+	
+	//Função desativa o beacon, enviando o ID 90000000 padrão para o arduino através do MQTT.
+	@GetMapping("/desativar/{id_beacon}")
+	public String desativarBeacon(@PathVariable("id_beacon") Integer id_beacon) {
+		Beacon beacon = beaconService.buscarBeacon(id_beacon);
+		
+		try {
+			this.publicar("90000000", beacon.getNome().toUpperCase());
+			
+			beacon.setAtivado(false);
+			beaconService.salvarBeacon(beacon);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		return "redirect:/beacon/"+ beacon.getId();
+	}
+	
+	//Função remove uma sala do beacon.
+		@GetMapping("/{id_beacon}/remover_sala/{id_sala}")
+		public String removerSala(@PathVariable("id_beacon") Integer id_beacon, @PathVariable("id_sala") Integer id_sala) {
+			Sala sala = salaService.buscarSala(id_sala);
+			Beacon beacon = beaconService.buscarBeacon(id_beacon);
+			
+			sala.setBeacon(null);
+			salaService.salvarSala(sala);
+			
+			beacon.setSala(null);
+			beaconService.salvarBeacon(beacon);
+				
+			return "redirect:/beacon/"+ beacon.getId();
+		}
 	
 	//Remove o beacon da sala antiga e adiciona na nova sala e atualiza as duas.
 	public void alterarSala (Sala antiga, Sala nova, Beacon beacon) {
@@ -159,6 +205,15 @@ public class BeaconController {
 			salaService.salvarSala(nova);
 		}
 		
+	}
+	
+	//Envia via MQTT uma mensagem para o arduino.
+	public void publicar(String mensagem, String topico) throws MqttException {
+		MqttClient client = new MqttClient(Constants.URI_MQTT, MqttClient.generateClientId());
+	    client.connect();
+	    MqttMessage message = new MqttMessage();
+	    message.setPayload(mensagem.getBytes());
+	    client.publish(topico, message);
 	}
 
 }
