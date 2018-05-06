@@ -31,8 +31,7 @@ public class ThreadService implements Runnable {
 	@Override
 	public void run() {
 		try {
-			while(true) {
-								
+			while(true) {	
 				Calendar calendar = new GregorianCalendar();
 				 Date trialTime = new Date();
 				 calendar.setTime(trialTime);
@@ -44,7 +43,7 @@ public class ThreadService implements Runnable {
 				 if(!diaSemana.equals("")) {
 					 this.verificaHorario(hora, minutos, diaSemana);
 				 }
-
+				 //Sleep por 5min
 				 Thread.sleep(300000);
 			}
 		} catch (Exception e) {
