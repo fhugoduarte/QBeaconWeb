@@ -1,5 +1,6 @@
-package com.tcc.qbeacon.service;
+package com.tcc.qbeacon.model;
 
+import java.text.Normalizer;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -9,16 +10,14 @@ import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import com.tcc.qbeacon.controller.TurmaController;
-import com.tcc.qbeacon.model.Beacon;
-import com.tcc.qbeacon.model.Sala;
+import com.tcc.qbeacon.service.BeaconService;
+import com.tcc.qbeacon.service.SalaService;
 import com.tcc.qbeacon.util.Constants;
 
-@Service
-public class ThreadService implements Runnable {
-	
+public class ThreadModel implements Runnable {
+
 	@Autowired
 	SalaService salaService;
 	
@@ -27,9 +26,10 @@ public class ThreadService implements Runnable {
 	
 	@Autowired
 	TurmaController turmaController;
-
+	
 	@Override
 	public void run() {
+		// TODO Auto-generated method stub
 		try {
 			while(true) {	
 				Calendar calendar = new GregorianCalendar();
@@ -49,7 +49,6 @@ public class ThreadService implements Runnable {
 		} catch (Exception e) {
 			System.err.println("ERRO");
 		}
-		
 	}
 	
 	private String traduzDiaSemana(int diaSemana) {
@@ -350,6 +349,10 @@ public class ThreadService implements Runnable {
 					+ sala.getBloco().getNome() + "/"
 					+ sala.getNome()).toUpperCase();
 			
+			//Remove acentos, caracteres especiais e espaços do tópico.
+			mqttTopico = Normalizer.normalize(mqttTopico, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "")
+					.replaceAll(" ", "");
+			
 			MqttClient client = new MqttClient(Constants.URI_MQTT, MqttClient.generateClientId());
 		    client.connect();
 		    MqttMessage message = new MqttMessage();
@@ -365,6 +368,10 @@ public class ThreadService implements Runnable {
 					+ sala.getBloco().getCampus().getNome() + "/"
 					+ sala.getBloco().getNome() + "/"
 					+ sala.getNome()).toUpperCase();
+			
+			//Remove acentos, caracteres especiais e espaços do tópico.
+			mqttTopico = Normalizer.normalize(mqttTopico, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "")
+					.replaceAll(" ", "");
 			
 			MqttClient client = new MqttClient(Constants.URI_MQTT, MqttClient.generateClientId());
 		    client.connect();
@@ -425,7 +432,5 @@ public class ThreadService implements Runnable {
 		}
 		
 	}
-	
-	
-	
+
 }
