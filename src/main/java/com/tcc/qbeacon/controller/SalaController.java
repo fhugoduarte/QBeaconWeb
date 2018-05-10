@@ -1,5 +1,6 @@
 package com.tcc.qbeacon.controller;
 
+import java.text.Normalizer;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -204,12 +205,15 @@ public class SalaController {
 					+ sala.getBloco().getNome() + "/"
 					+ sala.getNome()).toUpperCase();
 			try {
+				mqttTopico = Normalizer.normalize(mqttTopico, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "")
+						.replaceAll(" ", "");
 				this.publicar("1", mqttTopico);
 				
 				sala.setEnergia(true);
 				salaService.salvarSala(sala);
 			} catch (Exception e) {
 				// TODO: handle exception
+				System.err.println("TESTE ERRO");
 			}
 			
 		}
@@ -229,6 +233,8 @@ public class SalaController {
 					+ sala.getNome()).toUpperCase();
 			
 			try {
+				mqttTopico = Normalizer.normalize(mqttTopico, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "")
+						.replaceAll(" ", "");
 				this.publicar("0", mqttTopico);
 				
 				sala.setEnergia(false);

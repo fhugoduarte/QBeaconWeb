@@ -22,6 +22,10 @@ public class ReservaService {
 		return reservaRepo.findOne(id);
 	}
 	
+	public List<Reserva> buscarReservas (String diaSemana) {
+		return reservaRepo.buscarReservas(diaSemana);
+	}
+	
 	public List<Reserva> pegarReservas () {
 		return reservaRepo.findAll();
 	}
