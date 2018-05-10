@@ -1,5 +1,6 @@
-package com.tcc.qbeacon.model;
+package com.tcc.qbeacon.controller;
 
+import java.io.IOException;
 import java.text.Normalizer;
 import java.util.Calendar;
 import java.util.Date;
@@ -10,8 +11,11 @@ import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Controller;
 
+import com.tcc.qbeacon.model.Beacon;
+import com.tcc.qbeacon.model.Sala;
 import com.tcc.qbeacon.service.AulaService;
 import com.tcc.qbeacon.service.BeaconService;
 import com.tcc.qbeacon.service.ReservaService;
@@ -19,7 +23,8 @@ import com.tcc.qbeacon.service.SalaService;
 import com.tcc.qbeacon.service.TurmaService;
 import com.tcc.qbeacon.util.Constants;
 
-public class ThreadModel implements Runnable {
+@Controller
+public class ThreadController {
 
 	@Autowired
 	SalaService salaService;
@@ -36,37 +41,22 @@ public class ThreadModel implements Runnable {
 	@Autowired
 	ReservaService reservaService;
 	
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-		try {
-			while(true) {	
-					
-				Calendar calendar = new GregorianCalendar();
-				 Date trialTime = new Date();
-				 calendar.setTime(trialTime);
-				 
-				String diaSemana = this.traduzDiaSemana(calendar.get(Calendar.DAY_OF_WEEK));
-				int hora = calendar.get(Calendar.HOUR_OF_DAY);
-				int minutos = calendar.get(Calendar.MINUTE);
-				 
-				 String data = Integer.toString(calendar.get(Calendar.DAY_OF_MONTH)) + "/" 
-						 + Integer.toString(calendar.get(Calendar.MONTH) + 1) + "/" 
-						 + Integer.toString(calendar.get(Calendar.YEAR));
-				 
-				 if(!diaSemana.equals("")) {
-					 this.verificaHorario(hora, minutos, diaSemana, data);
-				 }
-				 //Sleep por 5min
-				 Thread.sleep(300000);
-				
-				System.err.println("DATA: " + data);
-				System.err.println("SEMANA: " + diaSemana);				
-				
-				Thread.sleep(2000);
-			}
-		} catch (Exception e) {
-			System.err.println("ERRO");
+	@Async("principal")
+	public void inicializar() throws IOException, InterruptedException{
+		while(true) {
+			Calendar calendar = new GregorianCalendar();
+			 Date trialTime = new Date();
+			 calendar.setTime(trialTime);
+			 
+			 String diaSemana = this.traduzDiaSemana(calendar.get(Calendar.DAY_OF_WEEK));
+			 int hora = calendar.get(Calendar.HOUR_OF_DAY);
+			 int minutos = calendar.get(Calendar.MINUTE);
+			 this.verificaHorario(22, 16, "Segunda-Feira");
+			/* if(!diaSemana.equals("")) {
+				 this.verificaHorario(hora, minutos, diaSemana);
+			 }*/
+			//Sleep por 5min
+			Thread.sleep(300000);
 		}
 	}
 	
@@ -87,7 +77,7 @@ public class ThreadModel implements Runnable {
 		}
 	}
 	
-	private void verificaHorario(int hora, int minutos, String diaSemana, String data) {
+	private void verificaHorario(int hora, int minutos, String diaSemana) {
 		if(hora == 7) {
 			if(minutos >= 40 && minutos <= 50) {
 				List<Sala> salasComAula = salaService.salasComAula("08:00 às 10:00", diaSemana);
@@ -345,9 +335,11 @@ public class ThreadModel implements Runnable {
 			}
 		}else if(hora == 22) {
 			if(minutos >= 15) {
+				System.err.println("TESTE");
 				List<Sala> salas = salaService.pegarSalas();
 				for (Sala sala : salas) {
 					try {
+						System.err.println("DESLIGOU A LUZ E OS BEACON DA SALA: " + sala.getNome());
 						this.desligaEnergia(sala);
 						this.desligaBeacon(sala);
 					} catch (Exception e) {
@@ -359,7 +351,7 @@ public class ThreadModel implements Runnable {
 			System.err.println("NENHUMA HORA");
 		}
 	}
-	
+
 	private void ligaEnergia(Sala sala) throws MqttException {
 		
 		if(!sala.isEnergia()) {
@@ -406,6 +398,8 @@ public class ThreadModel implements Runnable {
 			Beacon beacon = sala.getBeacon();
 			if(!beacon.isAtivado()) {
 				String mqttTopico = beacon.getNome().toUpperCase();
+				mqttTopico = Normalizer.normalize(mqttTopico, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "")
+						.replaceAll(" ", "");
 				
 				String mensagem = sala.getId().toString();
 				String zeros = "0000000";
@@ -451,43 +445,4 @@ public class ThreadModel implements Runnable {
 		
 	}
 
-	private void criaAulas(String data, String diaSemana) {
-		System.err.println("TESTE");
-		List<Sala> salasComAula = salaService.salasComAula(diaSemana);
-		System.err.println("TESTE2");
-		for (Sala sala : salasComAula) {
-			List<Reserva> reservas = sala.getReservas();
-			for (Reserva reserva : reservas) {
-				if(reserva.getHorario().getDiaSemana().equals(diaSemana)) {
-					this.criaAula(reserva, reserva.getTurma(), data);
-				}
-			}
-		}
-	}
-	
-	private void criaAula(Reserva reserva, Turma turma, String data) {
-		//Adiciona os atributos da aula e salva a aula.
-		Aula aula = new Aula();
-		aula.setAssunto("");
-		aula.setDia(data);
-		aula.setReserva(reserva);
-		aula.setTurma(reserva.getTurma());
-		aula.setFrequencia(null);	
-		aulaService.salvarAula(aula);
-		
-		//Adiciona aula a lista de aulas da turma e salva a turma.
-		List<Aula> aulas = turma.getAulas();
-		aulas.add(aula);
-		turma.setAulas(aulas);
-		turmaService.salvarTurma(turma);
-		
-		//Adiciona a aula a lista de aulas da reserva e salva a reserva.
-		aulas = reserva.getAulas();
-		aulas.add(aula);
-		reserva.setAulas(aulas);
-		reservaService.salvarReserva(reserva);
-		
-		
-	}
-	
 }

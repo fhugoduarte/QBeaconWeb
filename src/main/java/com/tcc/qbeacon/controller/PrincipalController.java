@@ -1,5 +1,8 @@
 package com.tcc.qbeacon.controller;
 
+import java.io.IOException;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,8 +14,12 @@ import com.tcc.qbeacon.model.Usuario;
 @RequestMapping(path="/")
 public class PrincipalController {
 	
+	@Autowired
+	ThreadController threadController;
+	
 	@RequestMapping(path="")
-	public ModelAndView loginUsuario() {
+	public ModelAndView loginUsuario() throws IOException, InterruptedException {
+		threadController.inicializar();
 		ModelAndView model = new ModelAndView("usuario/formLoginUsuario");
 		model.addObject("usuario", new Usuario());
 		return model;

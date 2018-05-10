@@ -1,5 +1,6 @@
 package com.tcc.qbeacon.controller;
 
+import java.text.Normalizer;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -148,8 +149,11 @@ public class BeaconController {
 
 		mensagem = zeros.substring(0, 8 - mensagem.length()) + mensagem;
 		
-		try {			
-			this.publicar(mensagem, beacon.getNome().toUpperCase());
+		try {		
+			String mqttTopico = beacon.getNome().toUpperCase();
+			mqttTopico = Normalizer.normalize(mqttTopico, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "")
+					.replaceAll(" ", "");
+			this.publicar(mensagem, mqttTopico);
 			
 			beacon.setAtivado(true);
 			beaconService.salvarBeacon(beacon);
@@ -160,13 +164,16 @@ public class BeaconController {
 		return "redirect:/beacon/"+ beacon.getId();
 	}
 	
-	//Função desativa o beacon, enviando o ID 90000000 padrão para o arduino através do MQTT.
+	//Função desativa o beacon, enviando o ID 20000000 padrão para o arduino através do MQTT.
 	@GetMapping("/desativar/{id_beacon}")
 	public String desativarBeacon(@PathVariable("id_beacon") Integer id_beacon) {
 		Beacon beacon = beaconService.buscarBeacon(id_beacon);
 		
 		try {
-			this.publicar("90000000", beacon.getNome().toUpperCase());
+			String mqttTopico = beacon.getNome().toUpperCase();
+			mqttTopico = Normalizer.normalize(mqttTopico, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "")
+					.replaceAll(" ", "");
+			this.publicar("20000000", mqttTopico);
 			
 			beacon.setAtivado(false);
 			beaconService.salvarBeacon(beacon);
