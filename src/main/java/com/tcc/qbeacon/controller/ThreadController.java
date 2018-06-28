@@ -51,10 +51,9 @@ public class ThreadController {
 			 String diaSemana = this.traduzDiaSemana(calendar.get(Calendar.DAY_OF_WEEK));
 			 int hora = calendar.get(Calendar.HOUR_OF_DAY);
 			 int minutos = calendar.get(Calendar.MINUTE);
-			 this.verificaHorario(22, 16, "Segunda-Feira");
-			/* if(!diaSemana.equals("")) {
+			 if(!diaSemana.equals("")) {
 				 this.verificaHorario(hora, minutos, diaSemana);
-			 }*/
+			 }
 			//Sleep por 5min
 			Thread.sleep(300000);
 		}
